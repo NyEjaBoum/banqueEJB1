@@ -1,0 +1,13 @@
+com\comptecourant\service\CompteCourantService.class
+com\comptecourant\entity\CompteCourant.class
+com\comptecourant\entity\MouvementCourant.class
+com\comptecourant\entity\Client.class
+com\comptecourant\service\ICompteCourantService.class
+com\comptecourant\web\CompteCourantServlet.class
+com\comptecourant\entity\MouvementCourant$TypeMouvement.class
+com\comptecourant\JakartaRestConfiguration.class
+com\comptecourant\web\MouvementServlet.class
+com\comptecourant\dao\ClientDAO.class
+com\comptecourant\dao\CompteCourantDAO.class
+com\comptecourant\dao\MouvementCourantDAO.class
+com\comptecourant\service\BusinessException.class

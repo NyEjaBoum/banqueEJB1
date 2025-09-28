@@ -1,0 +1,8 @@
+com\centralisateur\CentralisateurService.class
+com\centralisateur\CompteDepotClient.class
+com\centralisateur\CompteDepotServlet$1.class
+com\centralisateur\CompteCourantServlet.class
+com\centralisateur\servlet\DepotOperationServlet.class
+com\centralisateur\CompteDepotServlet.class
+com\centralisateur\MouvementDepot.class
+com\centralisateur\servlet\DepotParametreServlet.class
