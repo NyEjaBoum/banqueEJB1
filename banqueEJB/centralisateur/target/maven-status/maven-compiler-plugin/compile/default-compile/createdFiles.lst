@@ -1,6 +1,10 @@
 com\centralisateur\CentralisateurService.class
-com\centralisateur\CompteDepotClient.class
+com\centralisateur\Client.class
 com\centralisateur\CompteDepotServlet$1.class
+com\centralisateur\TypeMouvementDAO.class
+com\centralisateur\TypeMouvement.class
+com\centralisateur\ClientDAO.class
+com\centralisateur\CompteDepotClient.class
 com\centralisateur\CompteCourantServlet.class
 com\centralisateur\servlet\DepotOperationServlet.class
 com\centralisateur\CompteDepotServlet.class

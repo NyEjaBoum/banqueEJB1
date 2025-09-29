@@ -12,9 +12,8 @@ public class CompteCourant implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @Column(name = "client_id", nullable = false)
+    private Long clientId; // id du client dans central_db
 
     @NotNull
     @Column(name = "solde")
@@ -26,8 +25,8 @@ public class CompteCourant implements Serializable {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Client getClient() { return client; }
-    public void setClient(Client client) { this.client = client; }
+    public Long getClientId() { return clientId; }
+    public void setClientId(Long clientId) { this.clientId = clientId; }
     public Double getSolde() { return solde; }
     public void setSolde(Double solde) { this.solde = solde; }
     public LocalDate getDateMaj() { return dateMaj; }

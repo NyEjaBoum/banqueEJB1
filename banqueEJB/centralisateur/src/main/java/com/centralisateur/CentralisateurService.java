@@ -12,6 +12,12 @@ public class CentralisateurService {
     @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
     private ICompteCourantService compteCourantService;
 
+    @EJB
+    private TypeMouvementDAO typeMouvementDAO;
+
+    @EJB
+    private ClientDAO clientDAO;
+
     public Double getSolde(Long compteId) {
         return compteCourantService.getSolde(compteId);
     }
@@ -20,7 +26,7 @@ public class CentralisateurService {
         return compteCourantService.creerCompte(clientId);
     }
 
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, MouvementCourant.TypeMouvement type) {
+    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type) {
         return compteCourantService.ajouterMouvement(compteId, montant, type);
     }
 
@@ -30,6 +36,14 @@ public class CentralisateurService {
 
     public List<CompteCourant> listerComptes(){
         return compteCourantService.listerComptes();
+    }
+
+    public List<TypeMouvement> listerTypesMouvement() {
+        return typeMouvementDAO.findAll();
+    }
+
+    public List<Client> listerClients() {
+        return clientDAO.findAll();
     }
 
 }

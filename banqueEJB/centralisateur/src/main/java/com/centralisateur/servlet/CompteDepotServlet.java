@@ -23,7 +23,6 @@ public class CompteDepotServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         try {
-// ...existing code...
             if ("creer".equals(action)) {
                 int clientId = Integer.parseInt(req.getParameter("clientId"));
                 Double plafond = null;

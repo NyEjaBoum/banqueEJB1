@@ -22,12 +22,13 @@ public class MouvementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long compteId = Long.valueOf(req.getParameter("compteId"));
         Double montant = Double.valueOf(req.getParameter("montant"));
-        String typeStr = req.getParameter("type");
+        int typeId = Integer.parseInt(req.getParameter("type")); // type = id du type_mouvement
         CompteCourant compte = compteDAO.findById(compteId);
 
-        if (compte != null && montant > 0 && ("ENTREE".equals(typeStr) || "SORTIE".equals(typeStr))) {
+        // ENTREE = 1, SORTIE = 2
+        if (compte != null && montant > 0 && (typeId == 1 || typeId == 2)) {
             // Vérification du solde pour SORTIE
-            if ("SORTIE".equals(typeStr) && compte.getSolde() < montant) {
+            if (typeId == 2 && compte.getSolde() < montant) {
                 req.setAttribute("erreur", "Solde insuffisant pour effectuer ce retrait");
                 req.getRequestDispatcher("/comptes.jsp").forward(req, resp);
                 return;
@@ -36,15 +37,15 @@ public class MouvementServlet extends HttpServlet {
             MouvementCourant mvt = new MouvementCourant();
             mvt.setCompte(compte);
             mvt.setMontant(montant);
-            mvt.setType(typeStr);
+            mvt.setTypeMouvementId(typeId);
             mvt.setDateMouvement(java.time.LocalDate.now());
             mouvementDAO.save(mvt);
 
             // Mise à jour du solde
             double nouveauSolde = compte.getSolde();
-            if ("ENTREE".equals(typeStr)) {
+            if (typeId == 1) { // ENTREE
                 nouveauSolde += montant;
-            } else {
+            } else { // SORTIE
                 nouveauSolde -= montant;
             }
             compte.setSolde(nouveauSolde);

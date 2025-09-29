@@ -23,6 +23,9 @@ public class CompteCourantServlet extends HttpServlet {
         List<CompteCourant> comptes = compteService.listerComptes();
         req.setAttribute("comptes", comptes);
 
+        List<TypeMouvement> types = compteService.listerTypesMouvement();
+        req.setAttribute("typesMouvement", types);
+
         String action = req.getParameter("action");
         if ("solde".equals(action)) {
             Long compteId = Long.valueOf(req.getParameter("compteId"));
@@ -43,8 +46,8 @@ public class CompteCourantServlet extends HttpServlet {
             } else if ("mouvement".equals(action)) {
                 Long compteId = Long.valueOf(req.getParameter("compteId"));
                 Double montant = Double.valueOf(req.getParameter("montant"));
-                String typeStr = req.getParameter("type");
-                MouvementCourant.TypeMouvement type = MouvementCourant.TypeMouvement.valueOf(typeStr);
+                int type = Integer.parseInt(req.getParameter("type"));
+                // MouvementCourant.TypeMouvement type = MouvementCourant.TypeMouvement.valueOf(typeStr);
                 compteService.ajouterMouvement(compteId, montant, type);
                 resp.sendRedirect("comptes");
             }

@@ -11,8 +11,8 @@ namespace comptedepot.Models
         public int CompteId { get; set; }
         [Column("montant")]
         public decimal Montant { get; set; }
-        [Column("type")]
-        public string Type { get; set; } // "VERSEMENT" ou "RETRAIT"
+        [Column("type_mouvement_id")]
+        public int TypeMouvementId { get; set; } // référence à central_db.type_mouvement.id
         [Column("date_mouvement")]
         public DateTime DateMouvement { get; set; }
         public CompteDepot Compte { get; set; }

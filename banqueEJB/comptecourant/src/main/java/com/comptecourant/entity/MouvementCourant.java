@@ -22,8 +22,8 @@ public class MouvementCourant implements Serializable {
     private Double montant;
 
     @NotNull
-    @Column(name = "type")
-    private String type; // ENTREE / SORTIE
+    @Column(name = "type_mouvement_id")
+    private int typeMouvementId; //ENTREE OU SORTIE 
 
     @NotNull
     @Column(name = "date_mouvement")
@@ -35,12 +35,9 @@ public class MouvementCourant implements Serializable {
     public void setCompte(CompteCourant compte) { this.compte = compte; }
     public Double getMontant() { return montant; }
     public void setMontant(Double montant) { this.montant = montant; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public int getTypeMouvementId() { return typeMouvementId; }
+    public void setTypeMouvementId(int typeMouvementId) { this.typeMouvementId = typeMouvementId; }
+    public void setTypeMouvement(int type) { this.typeMouvementId = type; }
     public LocalDate getDateMouvement() { return dateMouvement; }
     public void setDateMouvement(LocalDate dateMouvement) { this.dateMouvement = dateMouvement; }
-
-    public enum TypeMouvement {
-        ENTREE, SORTIE
-    }
 }
