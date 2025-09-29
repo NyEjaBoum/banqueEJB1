@@ -3,6 +3,7 @@ package com.centralisateur;
 import com.comptecourant.entity.CompteCourant;
 import com.comptecourant.entity.MouvementCourant;
 import com.comptecourant.service.ICompteCourantService;
+import com.comptecourant.service.*;
 import com.comptecourant.service.BusinessException;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -13,8 +14,9 @@ import java.util.List;
 
 @WebServlet("/compte_courant")
 public class CompteCourantServlet extends HttpServlet {
-    @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
-    private ICompteCourantService compteService;
+    // @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
+    @EJB
+    private CentralisateurService compteService = new CentralisateurService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
