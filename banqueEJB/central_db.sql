@@ -13,15 +13,6 @@ CREATE TABLE client (
     numero_client INTEGER NOT NULL UNIQUE
 );
 
--- Type de prêt
-CREATE TABLE type_pret (
-    id SERIAL PRIMARY KEY,
-    libelle VARCHAR(50) NOT NULL,
-    nb_mois_remboursement INTEGER NOT NULL,
-    interet NUMERIC(5,2) NOT NULL,
-    montant NUMERIC(15,2) NOT NULL
-);
-
 -- Type de mouvement global
 CREATE TABLE type_mouvement (
     id SERIAL PRIMARY KEY,
