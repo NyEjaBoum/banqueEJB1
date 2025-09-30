@@ -1,0 +1,10 @@
+com\pret\service\IPretService.class
+com\pret\entity\TypePret.class
+com\pret\dao\PretDAO.class
+com\pret\dao\RemboursementDAO.class
+com\pret\service\PretService.class
+com\pret\dao\TypePretDAO.class
+com\pret\JakartaRestConfiguration.class
+com\pret\resources\JakartaEE11Resource.class
+com\pret\entity\Remboursement.class
+com\pret\entity\Pret.class

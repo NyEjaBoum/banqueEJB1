@@ -23,13 +23,27 @@ public class CompteCourantServlet extends HttpServlet {
         List<CompteCourant> comptes = compteService.listerComptes();
         req.setAttribute("comptes", comptes);
 
+        List<TypeMouvement> types = compteService.listerTypesMouvement();
+        req.setAttribute("typesMouvement", types);
+
+        List<Client> clients = compteService.listerClients();
+        req.setAttribute("listClients",clients);
+
         String action = req.getParameter("action");
         if ("solde".equals(action)) {
             Long compteId = Long.valueOf(req.getParameter("compteId"));
             Double solde = compteService.getSolde(compteId);
             req.setAttribute("solde", solde);
         }
-        req.getRequestDispatcher("/comptes.jsp").forward(req, resp);
+        else if ("historique".equals(action)) {
+            Long compteId = Long.valueOf(req.getParameter("compteId"));
+            List<MouvementCourant> mouvements = compteService.listerMouvementsCourant(compteId);
+            req.setAttribute("mouvements", mouvements);
+            req.setAttribute("typesMouvement", types);
+            req.setAttribute("compteId", compteId);
+            req.getRequestDispatcher("/courant/mouvements.jsp").forward(req, resp);
+        }
+            req.getRequestDispatcher("/courant/comptes.jsp").forward(req, resp);
     }
 
     @Override
@@ -43,10 +57,10 @@ public class CompteCourantServlet extends HttpServlet {
             } else if ("mouvement".equals(action)) {
                 Long compteId = Long.valueOf(req.getParameter("compteId"));
                 Double montant = Double.valueOf(req.getParameter("montant"));
-                String typeStr = req.getParameter("type");
-                MouvementCourant.TypeMouvement type = MouvementCourant.TypeMouvement.valueOf(typeStr);
+                int type = Integer.parseInt(req.getParameter("type"));
+                // MouvementCourant.TypeMouvement type = MouvementCourant.TypeMouvement.valueOf(typeStr);
                 compteService.ajouterMouvement(compteId, montant, type);
-                resp.sendRedirect("comptes");
+                resp.sendRedirect(req.getContextPath() + "/compte_courant");
             }
         } catch (Exception ex) {
             req.setAttribute("erreur", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());

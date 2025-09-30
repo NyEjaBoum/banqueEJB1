@@ -139,3 +139,5 @@ INSERT INTO mouvement_depot (compte_id, montant, type) VALUES
 INSERT INTO client (nom, prenom, email, telephone, numero_client)
 VALUES ('Boss', 'John', 'john.boss@example.com', '0341234567', 1005);
 
+ALTER TABLE parametre 
+ADD COLUMN taux_interet_pret NUMERIC(5,2) NOT NULL DEFAULT 24.0;

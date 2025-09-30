@@ -22,8 +22,8 @@ namespace comptedepot.Services
         // Règle 1 : Création du compte
         public CompteDepot CreerCompte(int clientId, decimal? plafondRetrait, decimal? tauxInteret)
         {
-            var client = _context.Clients.Find(clientId);
-            if (client == null) throw new Exception("Client introuvable");
+            // var client = _context.Clients.Find(clientId);
+            // if (client == null) throw new Exception("Client introuvable");
 
             var compte = new CompteDepot
             {
@@ -53,7 +53,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = montant,
-                Type = "VERSEMENT",
+                TypeMouvementId = 4, // 4 = VERSEMENT
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);
@@ -77,7 +77,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = montant,
-                Type = "RETRAIT",
+                TypeMouvementId = 5, // 5 = RETRAIT
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);
@@ -100,7 +100,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = interet,
-                Type = "VERSEMENT",
+                TypeMouvementId = 4, // 4 = VERSEMENT (intérêt = versement)
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);

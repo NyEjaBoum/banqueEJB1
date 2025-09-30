@@ -54,9 +54,11 @@
     <label>Montant: <input type="number" name="montant" step="0.01" required></label>
     <label>Type:
         <select name="type">
-            <option value="ENTREE">Entrée</option>
-            <option value="SORTIE">Sortie</option>
+            <c:forEach var="type" items="${typesMouvement}">
+                <option value="${type.id}">${type.libelle}</option>
+            </c:forEach>
         </select>
+
     </label>
     <button type="submit">Valider</button>
 </form>

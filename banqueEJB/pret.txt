@@ -1,0 +1,48 @@
+1️⃣ Qu’est-ce qu’un prêt ?
+
+Un prêt est une somme d’argent que la banque ou l’établissement financier donne à un client pour une période déterminée, avec l’obligation pour le client de rembourser ce montant, souvent avec des intérêts.
+
+Le client reçoit immédiatement le capital emprunté.
+
+Il doit rembourser selon un échéancier (mensuel, trimestriel, etc.).
+
+Le prêt peut être de différents types : étudiant, consommation, immobilier…
+
+2️⃣ Composants principaux d’un prêt
+
+Capital : montant initial emprunté.
+
+Taux d’intérêt : pourcentage appliqué sur le capital qui représente le coût du prêt pour le client.
+
+Durée : période pendant laquelle le prêt doit être remboursé.
+
+État du prêt :
+
+ENCOURS → le prêt est actif et pas encore totalement remboursé
+
+REMBOURSE → le prêt est entièrement remboursé
+
+Remboursements : paiements que le client effectue pour rembourser le capital + intérêts.
+
+3️⃣ Règles de fonctionnement
+
+Lorsqu’un prêt est créé, il commence généralement avec l’état ENCOURS.
+
+Chaque remboursement diminue le capital restant dû.
+
+Une fois le capital totalement remboursé, l’état passe à REMBOURSE.
+
+Le taux d’intérêt peut être global (défini par la banque) ou spécifique à un prêt particulier.
+
+4️⃣ Exemple pratique
+
+Un client emprunte 10 000 € à 5 % d’intérêt annuel pour 5 ans.
+
+Chaque mois, il rembourse une partie du capital + les intérêts.
+
+Tant que le capital n’est pas totalement remboursé, l’état du prêt reste ENCOURS.
+
+Quand le client a remboursé les 10 000 € + intérêts, le prêt devient REMBOURSE.
+
+💡 Résumé simple :
+Le prêt est une dette contractée par le client, qui doit être remboursée selon les conditions définies (capital, intérêts, durée). Les remboursements sont suivis et l’état du prêt change en fonction du capital restant dû.
