@@ -13,14 +13,6 @@ CREATE TABLE client (
     numero_client INTEGER NOT NULL UNIQUE
 );
 
--- Paramètres globaux
-CREATE TABLE parametre (
-    id SERIAL PRIMARY KEY,
-    plafond_retrait_global NUMERIC(12,2) NOT NULL,
-    taux_interet_depot NUMERIC(5,2) NOT NULL,
-    taux_interet_pret NUMERIC(5,2) NOT NULL DEFAULT 24.0
-);
-
 -- Type de prêt
 CREATE TABLE type_pret (
     id SERIAL PRIMARY KEY,
@@ -48,5 +40,4 @@ INSERT INTO client (nom, prenom, email, telephone, numero_client) VALUES
 ('Randria', 'Jean', 'jean.randria@email.com', '0341234567', 1001),
 ('Rakoto', 'Marie', 'marie.rakoto@email.com', '0347654321', 1002);
 
-INSERT INTO parametre (plafond_retrait_global, taux_interet_depot) VALUES
-(1000000.00, 2.0);
+

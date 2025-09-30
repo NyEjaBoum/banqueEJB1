@@ -20,3 +20,8 @@ CREATE TABLE remboursement (
     montant NUMERIC(12,2) NOT NULL CHECK (montant > 0),
     date_remboursement DATE NOT NULL DEFAULT CURRENT_DATE
 );
+
+CREATE TABLE parametre (
+    id SERIAL PRIMARY KEY,
+    taux_interet_pret NUMERIC(5,2) NOT NULL
+);

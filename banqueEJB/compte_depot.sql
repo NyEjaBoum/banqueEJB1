@@ -20,3 +20,12 @@ CREATE TABLE mouvement_depot (
     montant NUMERIC(12,2) NOT NULL CHECK (montant > 0),
     date_mouvement TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE parametre (
+    id SERIAL PRIMARY KEY,
+    plafond_retrait_global NUMERIC(12,2) NOT NULL,
+    taux_interet_depot NUMERIC(5,2) NOT NULL
+);
+
+INSERT INTO parametre (plafond_retrait_global, taux_interet_depot) VALUES
+(1000000.00, 2.0);
