@@ -12,7 +12,7 @@ public class DepotParametreServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/depotParametre.jsp").forward(req, resp);
+        req.getRequestDispatcher("/depot/depotParametre.jsp").forward(req, resp);
     }
 
     @Override
@@ -32,6 +32,6 @@ public class DepotParametreServlet extends HttpServlet {
         } catch (Exception ex) {
             req.setAttribute("erreur", ex.getMessage());
         }
-        req.getRequestDispatcher("/depotParametre.jsp").forward(req, resp);
+        req.getRequestDispatcher("/depot/depotParametre.jsp").forward(req, resp);
     }
 }

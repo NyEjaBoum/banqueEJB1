@@ -1,11 +1,20 @@
 package com.centralisateur;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+@Entity
+@Table(name = "client")
 public class Client {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nom;
     private String prenom;
     private String email;
     private String telephone;
+
+    @NotNull
+    @Column(name = "numero_client")
     private int numeroClient;
 
     public int getId() { return id; }
