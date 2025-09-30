@@ -19,7 +19,7 @@ public class CompteCourantService implements ICompteCourantService {
 
     public CompteCourant creerCompte(Long clientId) {
         // Client client = clientDAO.findById(clientId);
-        // if (client == null) throw new IllegalArgumentException("Client introuvable");
+        // if (client == null) throw new BusinessException("Client introuvable");
         CompteCourant compte = new CompteCourant();
         compte.setClientId(clientId);
         compte.setSolde(0.0);
@@ -32,6 +32,7 @@ public class CompteCourantService implements ICompteCourantService {
         CompteCourant compte = compteDAO.findById(compteId);
         if (compte == null) throw new BusinessException("Compte introuvable");
         if (montant == null || montant <= 0) throw new BusinessException("Montant doit être positif");
+        if (type != 1 && type != 2) throw new BusinessException("Type de mouvement non autorisé");
         if (type == 2 && compte.getSolde() < montant) {
             throw new BusinessException("Solde insuffisant pour effectuer ce retrait");
         }
@@ -57,13 +58,13 @@ public class CompteCourantService implements ICompteCourantService {
 
     public Double getSolde(Long compteId) {
         CompteCourant compte = compteDAO.findById(compteId);
-        if (compte == null) throw new IllegalArgumentException("Compte introuvable");
+        if (compte == null) throw new BusinessException("Compte introuvable");
         return compte.getSolde();
     }
 
     public List<MouvementCourant> listerMouvements(Long compteId) {
         CompteCourant compte = compteDAO.findById(compteId);
-        if (compte == null) throw new IllegalArgumentException("Compte introuvable");
+        if (compte == null) throw new BusinessException("Compte introuvable");
         return mouvementDAO.findByCompteOrderByDate(compte);
     }
 

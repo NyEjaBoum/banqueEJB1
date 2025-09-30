@@ -19,6 +19,6 @@ namespace comptedepot.Models
         public DateTime DateDernierInteret { get; set; }
         [Column("actif")]
         public bool Actif { get; set; }
-        public Client Client { get; set; }
+        // public Client Client { get; set; }
     }
 }

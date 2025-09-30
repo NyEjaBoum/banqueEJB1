@@ -22,8 +22,8 @@ namespace comptedepot.Services
         // Règle 1 : Création du compte
         public CompteDepot CreerCompte(int clientId, decimal? plafondRetrait, decimal? tauxInteret)
         {
-            var client = _context.Clients.Find(clientId);
-            if (client == null) throw new Exception("Client introuvable");
+            // var client = _context.Clients.Find(clientId);
+            // if (client == null) throw new Exception("Client introuvable");
 
             var compte = new CompteDepot
             {
