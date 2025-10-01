@@ -24,4 +24,12 @@ public class RemboursementDAO {
             .setParameter("pretId", pretId)
             .getResultList();
     }
+
+    public Double totalCapitalRemboursementByPretId(Long pretId) {
+        Double total = em.createQuery(
+            "SELECT COALESCE(SUM(r.capitalRembourse), 0) FROM Remboursement r WHERE r.pretId = :pretId", Double.class)
+            .setParameter("pretId", pretId)
+            .getSingleResult();
+        return total;
+    }
 }

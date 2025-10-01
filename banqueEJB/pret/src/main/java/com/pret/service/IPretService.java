@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IPretService {
     Pret creerPret(Pret pret);
-    Remboursement rembourserPret(Long pretId, Double montant, Double interetPayes, Double capitalRembourse);
+    Remboursement rembourserPret(Long pretId, Double montant);
     List<Remboursement> historiqueRemboursements(Long pretId);
     List<Pret> listerPrets();
     List<TypePret> listerTypesPret();

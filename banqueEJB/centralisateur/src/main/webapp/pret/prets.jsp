@@ -47,14 +47,15 @@
                     <input type="hidden" name="pretId" value="${pret.id}"/>
                     <button type="submit">Historique</button>
                 </form>
-                <form action="pret" method="post" style="display:inline;">
+                <li><a href="pret?action=rembourserPage&pretId=${pret.id}">Rembourser</a></li>
+
+                
+                <%-- <form action="pret" method="post" style="display:inline;">
                     <input type="hidden" name="action" value="rembourser"/>
                     <input type="hidden" name="pretId" value="${pret.id}"/>
                     <input type="number" name="montant" step="0.01" placeholder="Montant" required/>
-                    <input type="number" name="interetPayes" step="0.01" placeholder="Intérêts payés" required/>
-                    <input type="number" name="capitalRembourse" step="0.01" placeholder="Capital remboursé" required/>
                     <button type="submit">Rembourser</button>
-                </form>
+                </form> --%>
             </td>
         </tr>
     </c:forEach>
@@ -64,9 +65,10 @@
 <form action="pret" method="post">
     <input type="hidden" name="action" value="creer"/>
     <label>Client ID: <input type="number" name="clientId" required></label>
+    <label>Montant: <input type="number" name="montant" required></label>
     <label>Type Prêt ID: <input type="number" name="typePretId" required></label>
     <label>Date Début: <input type="date" name="dateDebut" required></label>
-    <label>Date Fin: <input type="date" name="dateFin" required></label>
+    <%-- <label>Date Fin: <input type="date" name="dateFin" required></label> --%>
     <button type="submit">Créer</button>
 </form>
 

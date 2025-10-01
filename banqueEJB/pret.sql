@@ -18,8 +18,9 @@ CREATE TABLE pret (
     client_id INT NOT NULL,              -- référence à central_db.client.id
     type_pret_id INT NOT NULL REFERENCES type_pret(id),  -- référence au type de prêt
     taux_interet NUMERIC(5,2) NOT NULL,  -- peut être copié depuis type_pret.interet
+    montant NUMERIC(15,2) NOT NULL,      -- montant réel emprunté par le client
     date_debut DATE NOT NULL,
-    date_fin DATE NOT NULL,
+    date_fin DATE NOT NULL,              -- calculée via nb_mois_remboursement du type de prêt
     etat VARCHAR(20) NOT NULL CHECK (etat IN ('ENCOURS','REMBOURSE'))
 );
 
@@ -33,10 +34,22 @@ CREATE TABLE remboursement (
     date_remboursement DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-
--- Insérer des types de prêt
+-- Insérer des types de prêt (en Ariary, taux élevés)
 INSERT INTO type_pret (libelle, nb_mois_remboursement, interet, montant) VALUES
-('Pret Etudiant', 36, 3.00, 10000.00),
-('Pret Immobilier', 240, 4.50, 500000.00),
-('Pret Court Terme', 12, 5.00, 5000.00),
-('Pret Long Terme', 60, 4.00, 50000.00);
+('Prêt Etudiant', 36, 24.00, 5000000),     -- 5 000 000 Ar max sur 3 ans
+('Prêt Immobilier', 240, 18.00, 200000000), -- 200 000 000 Ar max sur 20 ans
+('Prêt Court Terme', 12, 30.00, 2000000),  -- 2 000 000 Ar max sur 1 an
+('Prêt Long Terme', 60, 20.00, 30000000);  -- 30 000 000 Ar max sur 5 ans
+
+
+-- -- Exemple d’insertion d’un prêt pour un client
+-- INSERT INTO pret (client_id, type_pret_id, taux_interet, montant, date_debut, date_fin, etat)
+-- VALUES (
+--     101,  -- client_id
+--     1,    -- type_pret_id : Pret Etudiant
+--     (SELECT interet FROM type_pret WHERE id = 1),
+--     8000.00,  -- montant choisi par le client <= plafond du type
+--     '2025-10-01',  -- date de début du prêt
+--     '2025-10-01'::date + (SELECT nb_mois_remboursement FROM type_pret WHERE id = 1) * INTERVAL '1 month',  -- date de fin calculée
+--     'ENCOURS'
+-- );

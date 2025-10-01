@@ -60,8 +60,8 @@ public class CentralisateurService {
         return pretService.creerPret(pret);
     }
 
-    public Remboursement rembourserPret(Long pretId, Double montant, Double interetPayes, Double capitalRembourse) {
-        return pretService.rembourserPret(pretId, montant, interetPayes, capitalRembourse);
+    public Remboursement rembourserPret(Long pretId, Double montant) {
+        return pretService.rembourserPret(pretId, montant);
     }
 
     public List<Remboursement> historiqueRemboursements(Long pretId) {

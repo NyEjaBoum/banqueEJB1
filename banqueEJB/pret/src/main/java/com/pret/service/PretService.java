@@ -26,24 +26,56 @@ public class PretService implements IPretService {
     @Override
     public Pret creerPret(Pret pret) {
         TypePret typePret = typePretDAO.findById(pret.getTypePretId());
-        if (typePret == null) throw new IllegalArgumentException("Type de prêt introuvable");
-        // pret.setMontant(typePret.getMontant()); // montant défini par le type
-        pret.setTauxInteret(typePret.getInteret()); // taux défini par le type
+        if (typePret == null) {
+            throw new IllegalArgumentException("Type de prêt introuvable");
+        }
+        if (pret.getMontant() == null || pret.getMontant() <= 0) {
+            throw new IllegalArgumentException("Montant du prêt invalide");
+        }
+        if (pret.getMontant() > typePret.getMontant()) {
+            throw new IllegalArgumentException("Montant demandé supérieur au montant maximal autorisé pour ce type de prêt");
+        }
+        pret.setTauxInteret(typePret.getInteret());
+        if (pret.getDateDebut() == null) {
+            throw new IllegalArgumentException("Date de début du prêt requise");
+        }
+        pret.setDateFin(pret.getDateDebut().plusMonths(typePret.getNbMoisRemboursement()));
         pret.setEtat("ENCOURS");
         return pretDAO.save(pret);
     }
 
     @Override
-    public Remboursement rembourserPret(Long pretId, Double montant, Double interetPayes, Double capitalRembourse) {
-        Remboursement r = new Remboursement();
-        r.setPretId(pretId);
-        r.setMontant(montant);
-        r.setInteretPayes(interetPayes);
-        r.setCapitalRembourse(capitalRembourse);
-        r.setDateRemboursement(LocalDate.now());
-        remboursementDAO.save(r);
-        // TODO: mettre à jour l'état du prêt si remboursé
-        return r;
+    public Remboursement rembourserPret(Long pretId, Double montant) {
+        Pret lePret = pretDAO.findById(pretId);
+        if (lePret == null) {
+            throw new IllegalArgumentException("Prêt introuvable");
+        }
+        double capitalRestant;
+        List<Remboursement> remboursements = remboursementDAO.findByPretId(pretId);
+        if (remboursements != null && !remboursements.isEmpty()) { //raha misy remboursement efa natao
+            Double totalRembourse = remboursementDAO.totalCapitalRemboursementByPretId(pretId);
+            capitalRestant = lePret.getMontant() - totalRembourse;
+        } else { //raha tsy misy remboursement 
+            capitalRestant = lePret.getMontant();
+        }
+        double tauxMensuel = lePret.getTauxInteret() / 100 / 12;
+        double interetPayes = capitalRestant * tauxMensuel;
+        double capitalRembourse = montant - interetPayes;
+
+        Remboursement remboursement = new Remboursement();
+        remboursement.setPretId(pretId);
+        remboursement.setMontant(montant);
+        remboursement.setInteretPayes(interetPayes);
+        remboursement.setCapitalRembourse(capitalRembourse);
+        remboursement.setDateRemboursement(LocalDate.now());
+        remboursementDAO.save(remboursement);
+
+        double capitalRembourseTotal = remboursementDAO.totalCapitalRemboursementByPretId(pretId);
+        if (capitalRembourseTotal >= lePret.getMontant()) {
+            lePret.setEtat("REMBOURSE");
+            pretDAO.save(lePret);
+        }
+        return remboursement;
     }
 
     @Override
