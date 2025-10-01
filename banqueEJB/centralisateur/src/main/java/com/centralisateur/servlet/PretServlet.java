@@ -25,6 +25,10 @@ public class PretServlet extends HttpServlet {
             List<Remboursement> remboursements = centralisateurService.historiqueRemboursements(pretId);
             req.setAttribute("remboursements", remboursements);
             req.getRequestDispatcher("/pret/historiquePret.jsp").forward(req, resp);
+        } else if ("rembourserPage".equals(action)) {
+            Long pretId = Long.valueOf(req.getParameter("pretId"));
+            req.setAttribute("pretId", pretId);
+            req.getRequestDispatcher("/pret/rembourserPret.jsp").forward(req, resp);
         } else {
             List<Pret> prets = centralisateurService.listerPrets();
             req.setAttribute("prets", prets);
@@ -52,16 +56,17 @@ public class PretServlet extends HttpServlet {
                 } else {
                     pret.setTauxInteret(null); // ou une valeur par défaut, ex: 0.0
                 }
+                pret.setMontant(Double.valueOf(req.getParameter("montant")));
                 pret.setDateDebut(LocalDate.parse(req.getParameter("dateDebut")));
-                pret.setDateFin(LocalDate.parse(req.getParameter("dateFin")));
+                // pret.setDateFin(LocalDate.parse(req.getParameter("dateFin")));
                 centralisateurService.creerPret(pret);
                 resp.sendRedirect("pret");
             } else if ("rembourser".equals(action)) {
                 Long pretId = Long.valueOf(req.getParameter("pretId"));
                 Double montant = Double.valueOf(req.getParameter("montant"));
-                Double interetPayes = Double.valueOf(req.getParameter("interetPayes"));
-                Double capitalRembourse = Double.valueOf(req.getParameter("capitalRembourse"));
-                centralisateurService.rembourserPret(pretId, montant, interetPayes, capitalRembourse);
+                // Double interetPayes = Double.valueOf(req.getParameter("interetPayes"));
+                // Double capitalRembourse = Double.valueOf(req.getParameter("capitalRembourse"));
+                centralisateurService.rembourserPret(pretId, montant);
                 resp.sendRedirect("pret?action=historique&pretId=" + pretId);
             }
         } catch (Exception ex) {

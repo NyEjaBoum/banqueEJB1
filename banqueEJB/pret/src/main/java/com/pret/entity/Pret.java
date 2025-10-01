@@ -17,8 +17,8 @@ public class Pret implements Serializable {
     @Column(name = "type_pret_id", nullable = false)
     private Long typePretId;
 
-    // @Column(name = "montant", nullable = false)
-    // private Double montant;
+    @Column(name = "montant", nullable = false)
+    private Double montant;
 
     @Column(name = "taux_interet", nullable = false)
     private Double tauxInteret;
@@ -38,8 +38,8 @@ public class Pret implements Serializable {
     public void setClientId(Long clientId) { this.clientId = clientId; }
     public Long getTypePretId() { return typePretId; }
     public void setTypePretId(Long typePretId) { this.typePretId = typePretId; }
-    // public Double getMontant() { return montant; }
-    // public void setMontant(Double montant) { this.montant = montant; }
+    public Double getMontant() { return montant; }
+    public void setMontant(Double montant) { this.montant = montant; }
     public Double getTauxInteret() { return tauxInteret; }
     public void setTauxInteret(Double tauxInteret) { this.tauxInteret = tauxInteret; }
     public LocalDate getDateDebut() { return dateDebut; }
