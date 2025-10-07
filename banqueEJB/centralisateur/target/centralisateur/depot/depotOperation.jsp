@@ -1,37 +1,82 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Opérations sur Compte Dépôt</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<a href="comptesDepot.jsp">Retour</a>
-<h2>Verser de l'argent</h2>
-<form action="depotOperation" method="post">
-    <input type="hidden" name="action" value="versement"/>
-    <label>Compte ID: <input type="number" name="compteId" required></label>
-    <label>Montant: <input type="number" name="montant" step="0.01" required></label>
-    <button type="submit">Verser</button>
-</form>
+    <%@ include file="/includes/sidebar.jsp" %>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Opérations sur Compte Dépôt</h2>
+            <a href="comptesDepot.jsp" class="btn btn-secondary">Retour</a>
+        </div>
+        
+        <!-- Navigation rapide -->
+        <div class="card">
+            <h3>Navigation</h3>
+            <div class="btn-group">
+                <a href="comptesDepot.jsp" class="btn btn-secondary">Gestion Comptes</a>
+                <a href="depotParametre" class="btn btn-secondary">Modifier paramètres</a>
+            </div>
+        </div>
+        
+        <!-- Verser de l'argent -->
+        <div class="card">
+            <h3>Verser de l'argent</h3>
+            <form action="depotOperation" method="post">
+                <input type="hidden" name="action" value="versement"/>
+                
+                <div class="form-row">
+                    <label>
+                        Compte ID
+                        <input type="number" name="compteId" required>
+                    </label>
+                    
+                    <label>
+                        Montant
+                        <input type="number" name="montant" step="0.01" min="0.01" required placeholder="0.00">
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn">Effectuer le versement</button>
+            </form>
+        </div>
 
-<ul>
-    <li><a href="compte_depot">Versement / Retrait</a></li>
-    <li><a href="depotParametre">Modifier paramètres</a></li>
-</ul>
+        <!-- Retirer de l'argent -->
+        <div class="card">
+            <h3>Retirer de l'argent</h3>
+            <form action="depotOperation" method="post">
+                <input type="hidden" name="action" value="retrait"/>
+                
+                <div class="form-row">
+                    <label>
+                        Compte ID
+                        <input type="number" name="compteId" required>
+                    </label>
+                    
+                    <label>
+                        Montant
+                        <input type="number" name="montant" step="0.01" min="0.01" required placeholder="0.00">
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-warning">Effectuer le retrait</button>
+            </form>
+        </div>
 
-<h2>Retirer de l'argent</h2>
-<form action="depotOperation" method="post">
-    <input type="hidden" name="action" value="retrait"/>
-    <label>Compte ID: <input type="number" name="compteId" required></label>
-    <label>Montant: <input type="number" name="montant" step="0.01" required></label>
-    <button type="submit">Retirer</button>
-</form>
-
-<c:if test="${not empty erreur}">
-    <div style="color:red;">${erreur}</div>
-</c:if>
-<c:if test="${not empty result}">
-    <div style="color:green;">${result}</div>
-</c:if>
+        <!-- Messages d'état -->
+        <c:if test="${not empty erreur}">
+            <div class="alert alert-error">${erreur}</div>
+        </c:if>
+        <c:if test="${not empty result}">
+            <div class="alert alert-success">${result}</div>
+        </c:if>
+    </div>
 </body>
 </html>
