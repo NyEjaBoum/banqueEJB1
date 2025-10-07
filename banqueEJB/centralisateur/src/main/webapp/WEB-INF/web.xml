@@ -4,7 +4,7 @@
          version="6.0">
     <servlet>
         <servlet-name>CompteCourantServlet</servlet-name>
-        <servlet-class>com.centralisateur.CompteCourantServlet</servlet-class>
+        <servlet-class>com.centralisateur.courant.servlet.CompteCourantServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CompteCourantServlet</servlet-name>
