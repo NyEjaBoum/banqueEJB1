@@ -13,56 +13,73 @@
     
     <div class="main-content">
         <div class="page-header">
-            <h1>Gestion des Comptes Dépôt</h1>
+            <h2>Gestion Compte Dépôt</h2>
         </div>
-        
-        <!-- Créer un compte dépôt -->
+            <div class="card">
+        <h2>📋 Liste des Comptes Dépôt</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client ID</th>
+                    <th>Solde</th>
+                    <th>Taux Intérêt</th>
+                    <th>Plafond Retrait</th>
+                    <th>Date Dernier Intérêt</th>
+                    <th>Actif</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="compte" items="${comptesDepot}">
+                    <tr>
+                        <td>
+                            <a href="clientInfo?clientId=${compte.clientId}">
+                                ${compte.clientId}
+                            </a>
+                        </td>
+                        <td>${compte.clientId}</td>
+                        <td>${compte.solde}</td>
+                        <td>${compte.tauxInteret}</td>
+                        <td>${compte.plafondRetrait}</td>
+                        <td>${compte.dateDernierInteret}</td>
+                        <td>
+                            <c:if test="${compte.actif}">✅</c:if>
+                            <c:if test="${not compte.actif}">❌</c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
         <div class="card">
             <h3>Créer un compte dépôt</h3>
             <form action="compte_depot" method="post">
                 <input type="hidden" name="action" value="creer"/>
-                
-                <div class="form-row">
-                    <label>
-                        Client ID
-                        <input type="number" name="clientId" required>
-                    </label>
-                    
-                    <label>
-                        Plafond Retrait
-                        <input type="number" name="plafondRetrait" step="0.01" placeholder="0.00">
-                    </label>
-                    
-                    <label>
-                        Taux Intérêt (%)
-                        <input type="number" name="tauxInteret" step="0.01" placeholder="0.00">
-                    </label>
-                </div>
-                
-                <button type="submit" class="btn">Créer le compte</button>
+                <label>
+                    Client ID
+                    <input type="number" name="clientId" required>
+                </label>
+                <label>
+                    Plafond Retrait (optionnel)
+                    <input type="number" name="plafondRetrait" step="0.01">
+                </label>
+                <label>
+                    Taux Intérêt (optionnel)
+                    <input type="number" name="tauxInteret" step="0.01">
+                </label>
+                <button type="submit" class="btn">Créer</button>
             </form>
         </div>
 
-        <!-- Navigation des opérations -->
         <div class="card">
             <h3>Opérations disponibles</h3>
-            <div class="grid-2">
-                <a href="depotOperation" class="card-item-link">
-                    <div class="card-item">
-                        <h4>Versement / Retrait</h4>
-                        <p>Effectuer des opérations sur les comptes</p>
-                    </div>
-                </a>
-                <a href="depotParametre" class="card-item-link">
-                    <div class="card-item">
-                        <h4>Modifier paramètres</h4>
-                        <p>Ajuster les paramètres des comptes</p>
-                    </div>
-                </a>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="depotOperation" class="btn btn-secondary">Versement / Retrait</a>
+                <a href="depotParametre" class="btn btn-secondary">Modifier paramètres</a>
             </div>
         </div>
 
-        <!-- Consulter solde -->
         <div class="card">
             <h3>Consulter solde</h3>
             <form action="compte_depot" method="post">
@@ -71,11 +88,16 @@
                     Compte ID
                     <input type="number" name="compteId" required>
                 </label>
-                <button type="submit" class="btn btn-secondary">Voir solde</button>
+                <button type="submit" class="btn">Voir solde</button>
             </form>
         </div>
 
-        <!-- Historique des mouvements -->
+        <c:if test="${not empty solde}">
+            <div class="alert alert-info">
+                <strong>Solde du compte :</strong> ${solde}
+            </div>
+        </c:if>
+
         <div class="card">
             <h3>Historique des mouvements</h3>
             <form action="compte_depot" method="post">
@@ -84,50 +106,48 @@
                     Compte ID
                     <input type="number" name="compteId" required>
                 </label>
-                <button type="submit" class="btn btn-secondary">Voir historique</button>
+                <button type="submit" class="btn">Voir historique</button>
             </form>
         </div>
 
-        <!-- Messages d'état -->
-        <c:if test="${not empty erreur}">
-            <div class="alert alert-error">${erreur}</div>
-        </c:if>
-        <c:if test="${not empty result}">
-            <div class="alert alert-success">${result}</div>
-        </c:if>
-        <c:if test="${not empty solde}">
-            <div class="alert alert-info">Solde du compte : ${solde} €</div>
-        </c:if>
-
-        <!-- Historique des mouvements -->
         <c:if test="${not empty historique}">
             <div class="card">
                 <h3>Historique des mouvements</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Montant</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="mvt" items="${historique}">
                             <tr>
-                                <th>ID</th>
-                                <th>Montant</th>
-                                <th>Type</th>
-                                <th>Date</th>
+                                <td>${mvt.id}</td>
+                                <td>${mvt.montant}</td>
+                                <td>
+                                    <c:forEach var="type" items="${typesMouvement}">
+                                        <c:if test="${type.id == mvt.typeMouvementId}">
+                                            ${type.libelle}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+                                <td>${mvt.dateMouvement}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="mvt" items="${historique}">
-                                <tr>
-                                    <td>${mvt.id}</td>
-                                    <td class="${mvt.type == 'DEBIT' ? 'amount-negative' : 'amount-positive'}">${mvt.montant} €</td>
-                                    <td>
-                                        <span class="status ${mvt.type == 'CREDIT' ? 'status-active' : 'status-inactive'}">${mvt.type}</span>
-                                    </td>
-                                    <td>${mvt.dateMouvement}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </div>
+        </c:if>
+
+        <c:if test="${not empty erreur}">
+            <div class="alert alert-error">${erreur}</div>
+        </c:if>
+        
+        <c:if test="${not empty result}">
+            <div class="alert alert-success">${result}</div>
         </c:if>
     </div>
 </body>

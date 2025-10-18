@@ -2,6 +2,9 @@ package com.centralisateur.depot;
 
 import java.net.http.*;
 import java.net.URI;
+import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @jakarta.ejb.Stateless
 public class CompteDepotService {
@@ -15,6 +18,33 @@ public class CompteDepotService {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url.toString()))
             .POST(HttpRequest.BodyPublishers.noBody())
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    public List<CompteDepot> findByClientId(Long clientId) {
+        try {
+            String url = BASE_URL + "byClient/" + clientId;
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), new TypeReference<List<CompteDepot>>() {});
+        } catch (Exception ex) {
+            return java.util.Collections.emptyList();
+        }
+    }
+
+    public String findAllComptes() throws Exception {
+        String url = BASE_URL + "all";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
             .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
@@ -85,4 +115,28 @@ public class CompteDepotService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
+
+    public String getParametreGlobal() throws Exception {
+        String url = BASE_URL + "parametre";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    // public String modifierParametreGlobal(Double plafond, Double taux) throws Exception {
+    //     StringBuilder url = new StringBuilder(BASE_URL + "modifierParametre?");
+    //     if (plafond != null) url.append("plafond=").append(plafond).append("&");
+    //     if (taux != null) url.append("taux=").append(taux);
+    //     HttpClient client = HttpClient.newHttpClient();
+    //     HttpRequest request = HttpRequest.newBuilder()
+    //         .uri(URI.create(url.toString()))
+    //         .GET()
+    //         .build();
+    //     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    //     return response.body();
+    // }
 }

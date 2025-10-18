@@ -29,6 +29,25 @@ namespace comptedepot.Controllers
             }
         }
 
+        [HttpGet("byClient/{clientId}")]
+        public ActionResult<List<CompteDepot>> FindByClientId(long clientId)
+        {
+            var comptes = _service.FindAll().Where(c => c.ClientId == clientId).ToList();
+            return Ok(comptes);
+        }
+
+        [HttpGet("modifierParametre")]
+        public ActionResult<Parametre> ModifierParametreGlobal(decimal? plafond, decimal? taux){
+            try{
+                var param = _service.ModifierParametreGlobal(plafond,taux);
+                return Ok(param);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("creer")]
         public ActionResult<CompteDepot> CreerCompte(int clientId, decimal? plafondRetrait, decimal? tauxInteret)
         {
@@ -41,6 +60,12 @@ namespace comptedepot.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("all")]
+        public ActionResult<List<CompteDepot>> FindAllComptes()
+        {
+            return Ok(_service.FindAll());
         }
 
         [HttpPost("versement")]

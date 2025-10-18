@@ -9,26 +9,25 @@ CREATE TABLE client (
     nom VARCHAR(50) NOT NULL,
     prenom VARCHAR(50) NOT NULL,
     email VARCHAR(100),
-    telephone VARCHAR(20),
-    numero_client INTEGER NOT NULL UNIQUE
+    telephone VARCHAR(20)
 );
 
--- Type de mouvement global
 CREATE TABLE type_mouvement (
     id SERIAL PRIMARY KEY,
-    libelle VARCHAR(20) NOT NULL
+    libelle VARCHAR(30) NOT NULL,
+    description VARCHAR(100)
 );
 
--- Valeurs initiales pour type_mouvement
-INSERT INTO type_mouvement (libelle) VALUES
-('ENTREE'),   -- Utilisé pour les dépôts ou crédits sur un compte courant
-('SORTIE'),   -- Utilisé pour les retraits ou débits sur un compte courant
-('VIREMENT'), -- Utilisé pour les transferts d'argent entre comptes
-('VERSEMENT'),-- Utilisé pour les dépôts sur un compte dépôt
-('RETRAIT');  -- Utilisé pour les retraits depuis un compte dépôt
+INSERT INTO type_mouvement (id, libelle, description) VALUES
+(1, 'DEPOT', 'Dépôt d''argent sur un compte'),
+(2, 'RETRAIT', 'Retrait d''argent d''un compte'),
+(3, 'VIREMENT_SORTANT', 'Envoi vers un autre compte'),
+(4, 'VIREMENT_ENTRANT', 'Réception depuis un autre compte'),
+(5, 'INTERET', 'Application d''intérêts sur dépôt'),
+(6, 'FRAIS', 'Prélèvement de frais bancaires');
 
-INSERT INTO client (nom, prenom, email, telephone, numero_client) VALUES
-('Randria', 'Jean', 'jean.randria@email.com', '0341234567', 1001),
-('Rakoto', 'Marie', 'marie.rakoto@email.com', '0347654321', 1002);
+INSERT INTO client (nom, prenom, email, telephone) VALUES
+('Randria', 'Jean', 'jean.randria@email.com', '0341234567'),
+('Rakoto', 'Marie', 'marie.rakoto@email.com', '0347654321');
 
 

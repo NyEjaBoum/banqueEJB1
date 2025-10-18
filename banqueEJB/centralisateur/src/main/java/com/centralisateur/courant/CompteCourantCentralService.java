@@ -41,6 +41,9 @@ public class CompteCourantCentralService {
     public List<CompteCourant> listerComptes() {
         return compteCourantEJB.listerComptes();
     }
+    public List<CompteCourant> findByClientId(Long clientId){
+        return compteCourantEJB.findByClientId(clientId);
+    }
 
     public List<TypeMouvement> listerTypesMouvement() {
         return typeMouvementDAO.findAll();

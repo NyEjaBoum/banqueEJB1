@@ -8,9 +8,13 @@ com\centralisateur\pret\servlet\PretServlet.class
 com\centralisateur\TypeMouvement.class
 com\centralisateur\courant\CompteCourantCentralService.class
 com\centralisateur\ClientDAO.class
+com\centralisateur\depot\CompteDepotService$1.class
 com\centralisateur\pret\PretCentralService.class
 com\centralisateur\depot\CompteDepotService.class
+com\centralisateur\servlet\ClientInfoServlet.class
+com\centralisateur\depot\CompteDepot.class
 com\centralisateur\servlet\DepotOperationServlet.class
 com\centralisateur\courant\servlet\CompteCourantServlet.class
+com\centralisateur\depot\servlet\CompteDepotServlet$2.class
 com\centralisateur\servlet\DepotParametreServlet.class
 com\centralisateur\servlet\ClientServlet.class

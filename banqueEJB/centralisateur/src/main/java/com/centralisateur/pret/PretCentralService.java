@@ -29,7 +29,12 @@ public class PretCentralService {
         return pretEJB.listerPrets();
     }
 
+    public List<Pret> findByClientId(Long clientId){
+        return pretEJB.findByClientId(clientId);
+    }
+
     public List<TypePret> listerTypesPret() {
         return pretEJB.listerTypesPret();
     }
+
 }

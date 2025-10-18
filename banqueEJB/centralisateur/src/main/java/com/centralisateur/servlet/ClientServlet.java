@@ -25,14 +25,14 @@ public class ClientServlet extends HttpServlet {
             String prenom = req.getParameter("prenom");
             String email = req.getParameter("email");
             String telephone = req.getParameter("telephone");
-            int numeroClient = Integer.parseInt(req.getParameter("numeroClient"));
+            // int numeroClient = Integer.parseInt(req.getParameter("numeroClient"));
 
             Client client = new Client();
             client.setNom(nom);
             client.setPrenom(prenom);
             client.setEmail(email);
             client.setTelephone(telephone);
-            client.setNumeroClient(numeroClient);
+            // client.setNumeroClient(numeroClient);
 
             clientDAO.save(client);
             req.setAttribute("success", "Client ajouté avec succès !");
