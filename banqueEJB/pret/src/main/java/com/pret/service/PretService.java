@@ -11,6 +11,7 @@ import jakarta.ejb.Remote;
 import jakarta.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
 
 @Stateless
 @Remote(IPretService.class)
@@ -42,6 +43,15 @@ public class PretService implements IPretService {
         pret.setDateFin(pret.getDateDebut().plusMonths(typePret.getNbMoisRemboursement()));
         pret.setEtat("ENCOURS");
         return pretDAO.save(pret);
+    }
+
+    public List<Pret> findByClientId(Long clientId) {
+        List<Pret> all = listerPrets();
+        List<Pret> result = new ArrayList<>();
+        for(Pret p : all){
+            if (p.getClientId() != null && p.getClientId() == clientId) result.add(p);
+        }
+        return result;
     }
 
     @Override

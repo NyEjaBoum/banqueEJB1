@@ -273,75 +273,6 @@ button:hover, .btn:hover {
     font-size: 0.85rem;
 }
 
-/* Styles pour les montants */
-.amount-positive {
-    color: #10b981;
-    font-weight: 600;
-}
-
-.amount-negative {
-    color: #ef4444;
-    font-weight: 600;
-}
-
-/* Styles pour les statuts */
-.status {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-.status-active {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status-inactive {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* Améliorations pour les cartes avec liens */
-.card-item-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s ease;
-}
-
-.card-item-link:hover {
-    transform: translateY(-2px);
-    text-decoration: none;
-}
-
-.card-item-link .card-item {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.card-item-link:hover .card-item {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    background: #ffffff;
-}
-
-/* Améliorations pour les grilles */
-.grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-/* Améliorations pour les actions */
-.actions {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e2e8f0;
-    text-align: center;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .sidebar {
@@ -372,39 +303,6 @@ button:hover, .btn:hover {
     
     th, td {
         padding: 10px 8px;
-    }
-    
-    .form-row {
-        flex-direction: column;
-    }
-    
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
-    
-    .btn-group {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .btn-group .btn {
-        width: 100%;
-    }
-}
-
-/* Animation pour les alertes */
-.alert {
-    animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 

@@ -6,6 +6,8 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
+import java.util.ArrayList;
+
 import jakarta.ejb.Remote;
 
 @Stateless
@@ -26,6 +28,15 @@ public class CompteCourantService implements ICompteCourantService {
         compte.setDateMaj(java.time.LocalDate.now());
         compteDAO.save(compte);
         return compte;
+    }
+
+    public List<CompteCourant> findByClientId(Long clientId){
+        List<CompteCourant> list = new ArrayList<>();
+        List<CompteCourant> all = listerComptes();
+        for (CompteCourant c : all) {
+            if (c.getClientId() != null && c.getClientId() == clientId) list.add(c);
+        }
+        return list;
     }
 
     public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type) {

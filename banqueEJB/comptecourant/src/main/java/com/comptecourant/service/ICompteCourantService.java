@@ -10,5 +10,7 @@ public interface ICompteCourantService {
     Double getSolde(Long compteId);
     List<MouvementCourant> listerMouvements(Long compteId);
     List<CompteCourant> listerComptes();
+    List<CompteCourant> findByClientId(Long clientId);
+
 
 }

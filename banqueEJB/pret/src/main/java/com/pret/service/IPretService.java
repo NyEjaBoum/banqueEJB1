@@ -11,5 +11,6 @@ public interface IPretService {
     List<Remboursement> historiqueRemboursements(Long pretId);
     List<Pret> listerPrets();
     List<TypePret> listerTypesPret();
+    List<Pret> findByClientId(Long clientId);
 
 }

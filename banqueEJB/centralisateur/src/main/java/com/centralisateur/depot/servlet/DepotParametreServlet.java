@@ -28,6 +28,14 @@ public class DepotParametreServlet extends HttpServlet {
                 Double nouveauTaux = Double.valueOf(req.getParameter("nouveauTaux"));
                 result = service.modifierTauxInteret(compteId, nouveauTaux);
             }
+            // else if ("modifierParametre".equals(action)) {
+            //     Double plafond = req.getParameter("plafond") != null && !req.getParameter("plafond").isEmpty()
+            //         ? Double.valueOf(req.getParameter("plafond")) : null;
+            //     Double taux = req.getParameter("taux") != null && !req.getParameter("taux").isEmpty()
+            //         ? Double.valueOf(req.getParameter("taux")) : null;
+            //     result = service.modifierParametreGlobal(plafond, taux);
+            //     req.setAttribute("result", result);
+            // }
             req.setAttribute("result", result);
         } catch (Exception ex) {
             req.setAttribute("erreur", ex.getMessage());

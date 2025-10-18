@@ -19,6 +19,21 @@ namespace comptedepot.Services
             return param;
         }
 
+        public Parametre ModifierParametreGlobal(decimal? plafond, decimal? taux)
+        {
+            var param = GetParametreGlobal();
+            if (plafond.HasValue)
+                param.PlafondRetraitGlobal = plafond.Value;
+            // sinon on garde la valeur existante
+
+            if (taux.HasValue)
+                param.TauxInteretDepot = taux.Value;
+            // sinon on garde la valeur existante
+
+            _context.SaveChanges();
+            return param;
+        }
+
         // Règle 1 : Création du compte
         public CompteDepot CreerCompte(int clientId, decimal? plafondRetrait, decimal? tauxInteret)
         {
@@ -39,6 +54,10 @@ namespace comptedepot.Services
             return compte;
         }
 
+        public List<CompteDepot> FindAll(){
+            return _context.ComptesDepot.ToList();
+        }
+
         // Règle 2, 3, 6 : Versement
         public MouvementDepot Verser(int compteId, decimal montant)
         {
@@ -53,7 +72,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = montant,
-                TypeMouvementId = 4, // 4 = VERSEMENT
+                TypeMouvementId = 1, // 1 = VERSEMENT ou depot entree d'argent
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);
@@ -77,7 +96,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = montant,
-                TypeMouvementId = 5, // 5 = RETRAIT
+                TypeMouvementId = 2, // 2 = RETRAIT
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);
@@ -100,7 +119,7 @@ namespace comptedepot.Services
             {
                 CompteId = compteId,
                 Montant = interet,
-                TypeMouvementId = 4, // 4 = VERSEMENT (intérêt = versement)
+                TypeMouvementId = 5, // 5 = VERSEMENT (intérêt)
                 DateMouvement = DateTime.UtcNow
             };
             _context.MouvementsDepot.Add(mvt);
@@ -142,5 +161,7 @@ namespace comptedepot.Services
             _context.SaveChanges();
             return compte;
         }
+
+        
     }
 }

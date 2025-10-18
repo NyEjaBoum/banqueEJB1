@@ -3,25 +3,50 @@ package com.centralisateur.depot.servlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import jakarta.ejb.EJB;
 import java.io.IOException;
 import com.centralisateur.depot.CompteDepotService;
 import com.centralisateur.depot.MouvementDepot;
+import com.centralisateur.TypeMouvement;
+import com.centralisateur.TypeMouvementDAO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
-
+import com.centralisateur.depot.CompteDepot;
 @WebServlet("/compte_depot")
 public class CompteDepotServlet extends HttpServlet {
+    @EJB
+    private TypeMouvementDAO typeMouvementDAO;
+    
     private CompteDepotService service = new CompteDepotService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Charger les types de mouvement pour toutes les pages
+        List<TypeMouvement> types = typeMouvementDAO.findAll();
+        req.setAttribute("typesMouvement", types);
+
+        // Charger la liste des comptes dépôt depuis l'API
+        try {
+            String comptesJson = service.findAllComptes();
+            ObjectMapper mapper = new ObjectMapper();
+            List<CompteDepot> comptes = mapper.readValue(comptesJson, new TypeReference<List<CompteDepot>>() {});
+            req.setAttribute("comptesDepot", comptes);
+        } catch (Exception ex) {
+            req.setAttribute("erreur", ex.getMessage());
+        }
+
         req.getRequestDispatcher("/depot/comptesDepot.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+        
+        // Charger les types de mouvement avant toute action
+        List<TypeMouvement> types = typeMouvementDAO.findAll();
+        req.setAttribute("typesMouvement", types);
+        
         try {
             if ("creer".equals(action)) {
                 int clientId = Integer.parseInt(req.getParameter("clientId"));
@@ -49,6 +74,12 @@ public class CompteDepotServlet extends HttpServlet {
                 List<MouvementDepot> historique = mapper.readValue(historiqueJson, new TypeReference<List<MouvementDepot>>() {});
                 req.setAttribute("historique", historique);
             }
+            // else if ("liste".equals(action)) {
+            //     String comptesJson = service.findAllComptes();
+            //     ObjectMapper mapper = new ObjectMapper();
+            //     List<CompteDepot> comptes = mapper.readValue(comptesJson, new TypeReference<List<CompteDepot>>() {});
+            //     req.setAttribute("comptesDepot", comptes);
+            // }
         } catch (Exception ex) {
             req.setAttribute("erreur", ex.getMessage());
         }
