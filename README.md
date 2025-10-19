@@ -73,9 +73,7 @@ psql -U postgres
 \i C:\path\to\your\project\compte_depot.sql
 \i C:\path\to\your\project\pret.sql
 
-### 2. Initialisation des données de test
-# Chargez les données de test
-\i C:\path\to\your\project\script.sql
+base efatra
 
 ### 3. Vérification
 # Listez les bases créées
