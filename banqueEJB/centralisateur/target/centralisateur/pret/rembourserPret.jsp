@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -23,6 +25,13 @@
 
         <div class="card">
             <h2>Formulaire de remboursement</h2>
+            <p>
+                <strong>Montant restant à rembourser :</strong>
+                <fmt:formatNumber value="${montantRestant}" type="number" groupingUsed="true" /> Ar
+                <br>
+                <strong>Mensualité à payer :</strong>
+                <fmt:formatNumber value="${mensualite}" type="number" groupingUsed="true" /> Ar
+            </p>
             <form action="pret" method="post">
                 <input type="hidden" name="action" value="rembourser"/>
                 <input type="hidden" name="pretId" value="${pretId}"/>

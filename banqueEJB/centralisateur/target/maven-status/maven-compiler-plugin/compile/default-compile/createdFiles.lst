@@ -9,6 +9,7 @@ com\centralisateur\TypeMouvement.class
 com\centralisateur\courant\CompteCourantCentralService.class
 com\centralisateur\ClientDAO.class
 com\centralisateur\depot\CompteDepotService$1.class
+com\centralisateur\depot\Parametre.class
 com\centralisateur\pret\PretCentralService.class
 com\centralisateur\depot\CompteDepotService.class
 com\centralisateur\servlet\ClientInfoServlet.class

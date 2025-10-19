@@ -62,11 +62,11 @@
                 <input type="hidden" name="action" value="modifierParametre"/>
                 <div class="form-group">
                     <label>Nouveau plafond global :</label>
-                    <input type="number" name="plafond" step="0.01">
+                    <input type="number" name="plafond" step="0.01" value="${parametreGlobal.plafondRetraitGlobal}" required>
                 </div>
                 <div class="form-group">
                     <label>Nouveau taux d'intérêt global (%):</label>
-                    <input type="number" name="taux" step="0.01">
+                    <input type="number" name="taux" step="0.01" value="${parametreGlobal.tauxInteretDepot}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Modifier</button>
             </form>

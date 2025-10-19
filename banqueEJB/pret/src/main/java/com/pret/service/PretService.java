@@ -54,6 +54,29 @@ public class PretService implements IPretService {
         return result;
     }
 
+    public Double montantRestant(Long pretId) {
+        Pret pret = pretDAO.findById(pretId);
+        if (pret == null) return null;
+        Double totalRembourse = remboursementDAO.totalCapitalRemboursementByPretId(pretId);
+        if (totalRembourse == null) totalRembourse = 0.0;
+        return pret.getMontant() - totalRembourse;
+    }
+    
+    public Double montantMensuelRemboursement(Long pretId) {
+        Pret pret = pretDAO.findById(pretId);
+        if (pret == null) throw new IllegalArgumentException("Prêt introuvable");
+        TypePret typePret = typePretDAO.findById(pret.getTypePretId());
+        if (typePret == null) throw new IllegalArgumentException("Type de prêt introuvable");
+
+        double capital = pret.getMontant();
+        double tauxMensuel = pret.getTauxInteret() / 100 / 12;
+        int nbMois = typePret.getNbMoisRemboursement();
+
+        // Formule d'annuité mensuelle (prêt amortissable classique)
+        double mensualite = (capital * tauxMensuel) / (1 - Math.pow(1 + tauxMensuel, -nbMois));
+        return mensualite;
+    }
+
     @Override
     public Remboursement rembourserPret(Long pretId, Double montant) {
         Pret lePret = pretDAO.findById(pretId);

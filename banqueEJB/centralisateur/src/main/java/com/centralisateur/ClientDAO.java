@@ -18,10 +18,25 @@ public class ClientDAO {
     }
 
     public void save(Client client) {
-        if (client.getId() == 0) { // 0 = nouvel objet, pas encore persisté
+        if (client.getId() == null) { // null = nouvel objet, pas encore persisté
             em.persist(client);
         } else {
             em.merge(client);
         }
+    }
+
+    public Client update(Client client){
+        return em.merge(client);
+    }
+    
+    public List<Client> findByInfos(String nom, String prenom, String email, String telephone) {
+        return em.createQuery(
+            "SELECT c FROM Client c WHERE c.nom = :nom AND c.prenom = :prenom AND c.email = :email AND c.telephone = :telephone",
+            Client.class)
+            .setParameter("nom", nom)
+            .setParameter("prenom", prenom)
+            .setParameter("email", email)
+            .setParameter("telephone", telephone)
+            .getResultList();
     }
 }

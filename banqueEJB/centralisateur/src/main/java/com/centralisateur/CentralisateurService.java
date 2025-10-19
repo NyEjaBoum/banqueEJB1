@@ -76,4 +76,14 @@ public class CentralisateurService {
         return pretService.listerTypesPret();
     }
 
+    ////=>>>> CLIENT
+    public void enregistrerClient(Client client) throws Exception {
+        // Vérifie si un client existe déjà avec même nom, prénom, email, téléphone
+        List<Client> existants = clientDAO.findByInfos(client.getNom(), client.getPrenom(), client.getEmail(), client.getTelephone());
+        if (!existants.isEmpty()) {
+            throw new Exception("Un client avec ces informations existe déjà !");
+        }
+        clientDAO.save(client);
+    }
+
 }

@@ -24,10 +24,24 @@ public class PretServlet extends HttpServlet {
             Long pretId = Long.valueOf(req.getParameter("pretId"));
             List<Remboursement> remboursements = pretService.historiqueRemboursements(pretId);
             req.setAttribute("remboursements", remboursements);
+
+            // Ajout montant restant et mensualité
+            Double montantRestant = pretService.montantRestant(pretId);
+            Double mensualite = pretService.montantMensuelRemboursement(pretId);
+            req.setAttribute("montantRestant", montantRestant);
+            req.setAttribute("mensualite", mensualite);
+
             req.getRequestDispatcher("/pret/historiquePret.jsp").forward(req, resp);
         } else if ("rembourserPage".equals(action)) {
             Long pretId = Long.valueOf(req.getParameter("pretId"));
             req.setAttribute("pretId", pretId);
+
+            // Ajout montant restant et mensualité
+            Double montantRestant = pretService.montantRestant(pretId);
+            Double mensualite = pretService.montantMensuelRemboursement(pretId);
+            req.setAttribute("montantRestant", montantRestant);
+            req.setAttribute("mensualite", mensualite);
+
             req.getRequestDispatcher("/pret/rembourserPret.jsp").forward(req, resp);
         } else {
             List<Pret> prets = pretService.listerPrets();

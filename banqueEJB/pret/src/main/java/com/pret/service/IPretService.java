@@ -12,5 +12,6 @@ public interface IPretService {
     List<Pret> listerPrets();
     List<TypePret> listerTypesPret();
     List<Pret> findByClientId(Long clientId);
-
+    Double montantRestant(Long pretId);
+    Double montantMensuelRemboursement(Long pretId);
 }
