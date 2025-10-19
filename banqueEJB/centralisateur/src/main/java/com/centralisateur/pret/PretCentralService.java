@@ -21,6 +21,14 @@ public class PretCentralService {
         return pretEJB.rembourserPret(pretId, montant);
     }
 
+    public Double montantRestant(Long pretId) {
+        return pretEJB.montantRestant(pretId);
+    }
+
+    public Double montantMensuelRemboursement(Long pretId) {
+        return pretEJB.montantMensuelRemboursement(pretId);
+    }
+
     public List<Remboursement> historiqueRemboursements(Long pretId) {
         return pretEJB.historiqueRemboursements(pretId);
     }

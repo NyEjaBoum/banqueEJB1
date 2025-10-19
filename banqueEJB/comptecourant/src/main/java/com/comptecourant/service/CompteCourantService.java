@@ -67,10 +67,33 @@ public class CompteCourantService implements ICompteCourantService {
         return mouvement;
     }
 
+    // public Double getSolde(Long compteId) {
+    //     CompteCourant compte = compteDAO.findById(compteId);
+    //     if (compte == null) throw new BusinessException("Compte introuvable");
+    //     return compte.getSolde();
+    // }
+
     public Double getSolde(Long compteId) {
         CompteCourant compte = compteDAO.findById(compteId);
         if (compte == null) throw new BusinessException("Compte introuvable");
-        return compte.getSolde();
+        List<MouvementCourant> mouvements = mouvementDAO.findByCompteOrderByDate(compte);
+        double solde = 0.0;
+        for (MouvementCourant mvt : mouvements) {
+            switch (mvt.getTypeMouvementId()) {
+                case 1: // DEPOT
+                case 4: // VIREMENT_ENTRANT
+                    solde += mvt.getMontant();
+                    break;
+                case 2: // RETRAIT
+                case 3: // VIREMENT_SORTANT
+                    solde -= mvt.getMontant();
+                    break;
+                default:
+                    // autres types si besoin
+                    break;
+            }
+        }
+        return solde;
     }
 
     public List<MouvementCourant> listerMouvements(Long compteId) {

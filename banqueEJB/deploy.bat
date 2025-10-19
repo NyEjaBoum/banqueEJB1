@@ -1,13 +1,23 @@
 @echo off
-REM filepath: c:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\deploy.bat
-REM Copy centralisateur.war
-copy centralisateur\target\centralisateur.war C:\wildfly-37.0.1.Final\standalone\deployments\
+REM Compile comptecourant
+cd comptecourant
+call mvn clean install
+cd ..
 
-REM Copy comptecourant.jar
-copy comptecourant\target\comptecourant-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+REM Compile centralisateur
+cd centralisateur
+call mvn clean install
+cd ..
 
-REM Copy pret.jar
-copy pret\target\pret-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+REM Compile pret
+cd pret
+call mvn clean install
+cd ..
 
-echo Deployments copied!
+REM Déploiement dans WildFly
+call copy centralisateur\target\centralisateur.war C:\wildfly-37.0.1.Final\standalone\deployments\
+call copy comptecourant\target\comptecourant-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+call copy pret\target\pret-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+
+echo Compilation et déploiement terminés !
 pause

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -91,8 +93,16 @@
                     <input type="number" name="montant" required>
                 </div>
                 <div class="form-group">
-                    <label>Type Prêt ID:</label>
-                    <input type="number" name="typePretId" required>
+                    <label>Type de prêt:</label>
+                        <select name="typePretId" required>
+                            <c:forEach var="type" items="${typesPret}">
+                                <option value="${type.id}">
+                                    ${type.libelle} (
+                                    <fmt:formatNumber value="${type.montant}" type="number" groupingUsed="true" /> Ar,
+                                    ${type.interet}% sur ${type.nbMoisRemboursement} mois)
+                                </option>
+                            </c:forEach>
+                        </select>
                 </div>
                 <div class="form-group">
                     <label>Date Début:</label>

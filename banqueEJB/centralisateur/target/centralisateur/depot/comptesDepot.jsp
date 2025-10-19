@@ -22,6 +22,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Client ID</th>
+                    <th> Client </th>
                     <th>Solde</th>
                     <th>Taux Intérêt</th>
                     <th>Plafond Retrait</th>
@@ -33,11 +34,20 @@
                 <c:forEach var="compte" items="${comptesDepot}">
                     <tr>
                         <td>
+                                ${compte.id}
+                        </td>
+                        <td>
+                            <c:forEach var="client" items="${listClients}">
+                                <c:if test="${client.id == compte.clientId}">
+                                    ${client.nom} ${client.prenom}
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                        <td>
                             <a href="clientInfo?clientId=${compte.clientId}">
                                 ${compte.clientId}
                             </a>
                         </td>
-                        <td>${compte.clientId}</td>
                         <td>${compte.solde}</td>
                         <td>${compte.tauxInteret}</td>
                         <td>${compte.plafondRetrait}</td>
@@ -62,11 +72,12 @@
                 </label>
                 <label>
                     Plafond Retrait (optionnel)
-                    <input type="number" name="plafondRetrait" step="0.01">
+                    <input type="number" name="plafondRetrait" step="0.01" value="${parametreGlobal.plafondRetraitGlobal}">
+
                 </label>
                 <label>
                     Taux Intérêt (optionnel)
-                    <input type="number" name="tauxInteret" step="0.01">
+                    <input type="number" name="tauxInteret" step="0.01" value="${parametreGlobal.tauxInteretDepot}">
                 </label>
                 <button type="submit" class="btn">Créer</button>
             </form>

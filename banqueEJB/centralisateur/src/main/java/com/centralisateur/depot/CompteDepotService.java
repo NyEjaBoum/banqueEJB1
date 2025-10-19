@@ -127,16 +127,23 @@ public class CompteDepotService {
         return response.body();
     }
 
-    // public String modifierParametreGlobal(Double plafond, Double taux) throws Exception {
-    //     StringBuilder url = new StringBuilder(BASE_URL + "modifierParametre?");
-    //     if (plafond != null) url.append("plafond=").append(plafond).append("&");
-    //     if (taux != null) url.append("taux=").append(taux);
-    //     HttpClient client = HttpClient.newHttpClient();
-    //     HttpRequest request = HttpRequest.newBuilder()
-    //         .uri(URI.create(url.toString()))
-    //         .GET()
-    //         .build();
-    //     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    //     return response.body();
-    // }
+    public String modifierParametreGlobal(Double plafond, Double taux) throws Exception {
+        StringBuilder url = new StringBuilder(BASE_URL + "modifierParametre?");
+        boolean hasParam = false;
+        if (plafond != null) {
+            url.append("plafond=").append(plafond);
+            hasParam = true;
+        }
+        if (taux != null) {
+            if (hasParam) url.append("&");
+            url.append("taux=").append(taux);
+        }
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url.toString()))
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
 }
