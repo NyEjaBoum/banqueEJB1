@@ -5,6 +5,9 @@
         <class>com.comptecourant.entity.Client</class>
         <class>com.comptecourant.entity.CompteCourant</class>
         <class>com.comptecourant.entity.MouvementCourant</class>
+        <class>com.comptecourant.entity.Utilisateur</class>
+        <class>com.comptecourant.entity.Direction</class>
+        <class>com.comptecourant.entity.ActionRole</class>
         <jta-data-source>java:/jdbc/CompteCourantDS</jta-data-source>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

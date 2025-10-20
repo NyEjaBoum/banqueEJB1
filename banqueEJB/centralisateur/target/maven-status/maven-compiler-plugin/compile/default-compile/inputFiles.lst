@@ -3,6 +3,9 @@ C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\ClientDAO.java
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\courant\CompteCourantCentralService.java
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\courant\servlet\CompteCourantServlet.java
+C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\courant\servlet\LoginServlet.java
+C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\courant\servlet\LogoutServlet.java
+C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\courant\servlet\VirementServlet.java
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\depot\CompteDepot.java
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\depot\CompteDepotService.java
 C:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\centralisateur\src\main\java\com\centralisateur\depot\MouvementDepot.java

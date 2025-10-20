@@ -42,6 +42,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th> Client Id </th>
                         <th>Client</th>
                         <th>Solde</th>
                         <th>Date Maj</th>
@@ -116,6 +117,13 @@
                 <button type="submit" class="btn btn-primary">Valider</button>
             </form>
         </div>
+        <div class="card">
+    <h2>🔄 Actions rapides</h2>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="virement" class="btn btn-primary">💸 Effectuer un virement</a>
+        <a href="${pageContext.request.contextPath}" class="btn btn-secondary">🏠 Accueil</a>
+    </div>
+</div>
     </div>
 </body>
 </html>

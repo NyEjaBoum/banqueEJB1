@@ -10,6 +10,12 @@
             <a href="${pageContext.request.contextPath}/compte_courant" class="nav-item">
                 <i>💳</i> Comptes Courants
             </a>
+            <a href="${pageContext.request.contextPath}/compte_courant" class="nav-item">
+                <i>💳</i> Comptes Courants
+            </a>
+            <a href="${pageContext.request.contextPath}/virement" class="nav-item">
+                <i>💸</i> Virements
+            </a>
             <a href="${pageContext.request.contextPath}/compte_depot" class="nav-item">
                 <i>💰</i> Comptes Dépôts
             </a>
@@ -32,6 +38,12 @@
             <h3>Clients</h3>
             <a href="${pageContext.request.contextPath}/clients" class="nav-item">
                 <i>👥</i> Gestion Clients
+            </a>
+        </div>
+        <div class="nav-section">
+            <h3>éconnexion</h3>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-item">
+                <i>�</i> Se Déconnecter
             </a>
         </div>
     </nav>

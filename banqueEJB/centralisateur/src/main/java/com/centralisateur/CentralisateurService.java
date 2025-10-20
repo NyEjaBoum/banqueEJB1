@@ -15,8 +15,9 @@ import jakarta.ejb.Stateless;
 
 @Stateless
 public class CentralisateurService {
-    @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
-    private ICompteCourantService compteCourantService;
+    // Supprimez ces lignes car CompteCourantCentralService gère maintenant les comptes courants
+    // @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
+    // private ICompteCourantService compteCourantService;
 
     @EJB(lookup = "java:global/pret-1.0-SNAPSHOT/PretService!com.pret.service.IPretService")
     private IPretService pretService;
@@ -26,26 +27,6 @@ public class CentralisateurService {
 
     @EJB
     private ClientDAO clientDAO;
-
-    public Double getSolde(Long compteId) {
-        return compteCourantService.getSolde(compteId);
-    }
-
-    public CompteCourant creerCompte(Long clientId) {
-        return compteCourantService.creerCompte(clientId);
-    }
-
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type) {
-        return compteCourantService.ajouterMouvement(compteId, montant, type);
-    }
-
-    public List<MouvementCourant> listerMouvementsCourant(Long compteId) {
-        return compteCourantService.listerMouvements(compteId);
-    }
-
-    public List<CompteCourant> listerComptes(){
-        return compteCourantService.listerComptes();
-    }
 
     public List<TypeMouvement> listerTypesMouvement() {
         return typeMouvementDAO.findAll();
@@ -85,5 +66,4 @@ public class CentralisateurService {
         }
         clientDAO.save(client);
     }
-
 }
