@@ -55,12 +55,15 @@
                                     </c:if>
                                 </c:forEach>
                             </td>
-                            <td>
+                            <%-- <td>
                                 <c:forEach var="type" items="${typesPret}">
                                     <c:if test="${type.id == pret.typePretId}">
                                         ${type.montant} €
                                     </c:if>
                                 </c:forEach>
+                            </td> --%>
+                            <td>
+                                <fmt:formatNumber value="${pret.montant}" type="number" groupingUsed="true" /> Ar
                             </td>
                             <td>${pret.tauxInteret}</td>
                             <td>${pret.dateDebut}</td>

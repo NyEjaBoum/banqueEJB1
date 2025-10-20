@@ -1,13 +1,37 @@
 @echo off
-REM Compile comptecourant
+echo Nettoyage des modules...
+
+REM Nettoyer pret
+cd pret
+call mvn clean
+cd ..
+
+REM Nettoyer comptecourant  
 cd comptecourant
-mvn clean package
+call mvn clean
 cd ..
 
-REM Compile centralisateur
+REM Nettoyer centralisateur
 cd centralisateur
-mvn clean package
+call mvn clean
 cd ..
 
-echo Compilation finished!
+echo Compilation dans l'ordre...
+
+REM Compiler pret en premier
+cd pret
+call mvn clean install
+cd ..
+
+REM Compiler comptecourant
+cd comptecourant
+call mvn clean install
+cd ..
+
+REM Compiler centralisateur en dernier
+cd centralisateur
+call mvn clean install
+cd ..
+
+echo Terminé !
 pause

@@ -1,13 +1,99 @@
-@echo off
-REM filepath: c:\Users\NyEja\Documents\itu\S5\MrTahina\banqueEJB\deploy.bat
-REM Copy centralisateur.war
-copy centralisateur\target\centralisateur.war C:\wildfly-37.0.1.Final\standalone\deployments\
+@workspace bon, dans compte courant il y aura maintenant ca  \c postgres;
+DROP DATABASE IF EXISTS compte_courant_db;
+CREATE DATABASE compte_courant_db;
+\c compte_courant_db;
 
-REM Copy comptecourant.jar
-copy comptecourant\target\comptecourant-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+-- Table compte_courant existante
+CREATE TABLE compte_courant (
+    id SERIAL PRIMARY KEY,
+    client_id INT NOT NULL,
+    solde NUMERIC(12,2) NOT NULL DEFAULT 0,
+    date_maj DATE NOT NULL DEFAULT CURRENT_DATE
+);
 
-REM Copy pret.jar
-copy pret\target\pret-1.0-SNAPSHOT.jar C:\wildfly-37.0.1.Final\standalone\deployments\
+-- Table mouvement_courant existante
+CREATE TABLE mouvement_courant (
+    id SERIAL PRIMARY KEY,
+    compte_id INT NOT NULL REFERENCES compte_courant(id),
+    type_mouvement_id INT NOT NULL,
+    montant NUMERIC(12,2) NOT NULL CHECK (montant > 0),
+    date_mouvement DATE NOT NULL DEFAULT CURRENT_DATE
+);
 
-echo Deployments copied!
-pause
+-- ===== NOUVELLES TABLES POUR L'AUTHENTIFICATION =====
+
+-- Table des directions
+CREATE TABLE direction (
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL,
+    niveau INT NOT NULL -- 10 = Direction Générale, 8 = Direction, 5 = Service
+);
+
+-- Table des utilisateurs
+CREATE TABLE utilisateur (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    mot_de_passe VARCHAR(255) NOT NULL, -- hash du mot de passe
+    direction_id INT NOT NULL REFERENCES direction(id),
+    role INT NOT NULL, -- 1 = CONSULTANT, 2 = EMPLOYE, 3 = MANAGER, 4 = ADMIN
+    date_creation DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+-- Table des actions autorisées par rôle
+CREATE TABLE action_role (
+    id SERIAL PRIMARY KEY,
+    nom_table VARCHAR(50) NOT NULL, -- compte_courant, mouvement_courant
+    action VARCHAR(50) NOT NULL, -- CREATE, READ, UPDATE, DELETE, APPROVE
+    role INT NOT NULL -- 1 = CONSULTANT, 2 = EMPLOYE, 3 = MANAGER, 4 = ADMIN
+);
+
+-- ===== INSERTION DES DONNÉES =====
+
+-- Insertion des directions (pour compte courant seulement)
+INSERT INTO direction (libelle, niveau) VALUES
+('Direction Générale Comptes', 10),
+('Direction Comptes Courants', 8),
+('Service Gestion Comptes', 5),
+('Service Mouvements', 5),
+('Équipe Saisie', 3),
+('Consultants Comptes', 1);
+
+-- Insertion des utilisateurs par défaut avec mot de passe hashé
+-- Mot de passe : password123 -> SHA-256 hash
+INSERT INTO utilisateur (email, mot_de_passe, direction_id, role) VALUES
+('admin.comptes@banque.com', 'test', 1, 4), -- ADMIN
+('manager.comptes@banque.com', 'test', 2, 3), -- MANAGER
+('employe.comptes@banque.com', 'test', 3, 2), -- EMPLOYE
+('consultant.comptes@banque.com', 'test', 6, 1); -- CONSULTANT
+
+-- Insertion des permissions par rôle (SEULEMENT pour compte courant)
+INSERT INTO action_role (nom_table, action, role) VALUES
+-- ADMIN (4) : tous droits
+('compte_courant', 'CREATE', 4),
+('compte_courant', 'READ', 4),
+('compte_courant', 'UPDATE', 4),
+('compte_courant', 'DELETE', 4),
+('mouvement_courant', 'CREATE', 4),
+('mouvement_courant', 'READ', 4),
+('mouvement_courant', 'UPDATE', 4),
+('mouvement_courant', 'DELETE', 4),
+
+-- MANAGER (3) : gestion complète sauf suppression
+('compte_courant', 'CREATE', 3),
+('compte_courant', 'READ', 3),
+('compte_courant', 'UPDATE', 3),
+('mouvement_courant', 'CREATE', 3),
+('mouvement_courant', 'READ', 3),
+('mouvement_courant', 'UPDATE', 3),
+
+-- EMPLOYE (2) : création et modification
+('compte_courant', 'CREATE', 2),
+('compte_courant', 'READ', 2),
+('compte_courant', 'UPDATE', 2),
+('mouvement_courant', 'CREATE', 2),
+('mouvement_courant', 'READ', 2),
+
+-- CONSULTANT (1) : lecture seule
+('compte_courant', 'READ', 1),
+('mouvement_courant', 'READ', 1); 
+donc je veux ajouter tout ca, je veux aussi faire login donc creer code login et tout, et quand on fait login, on recupere tout les directions et tout les action role et on le met dans session stateful ejb create, tu comprends ma requete ? 
