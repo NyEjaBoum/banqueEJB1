@@ -8,7 +8,7 @@
         <class>com.comptecourant.entity.Utilisateur</class>
         <class>com.comptecourant.entity.Direction</class>
         <class>com.comptecourant.entity.ActionRole</class>
-        <jta-data-source>java:/jdbc/CompteCourantDS</jta-data-source>
+        <jta-data-source>java:/jdbc/BanqueDS</jta-data-source>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>

@@ -11,8 +11,8 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    @EJB
-    private IAuthService authService;
+@EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/LoginService!com.comptecourant.service.IAuthService")
+private IAuthService authService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,10 +31,10 @@ public class LoginServlet extends HttpServlet {
         if (sessionUtilisateur != null && sessionUtilisateur.isConnecte()) {
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("sessionUtilisateur", sessionUtilisateur);
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
+            resp.sendRedirect(req.getContextPath() + "/accueil");
         } else {
             req.setAttribute("error", "Email ou mot de passe incorrect");
-            req.getRequestDispatcher("/courant/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
     }
 }

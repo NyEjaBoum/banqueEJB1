@@ -58,4 +58,15 @@ public class CompteCourantCentralService {
     public boolean effectuerVirement(Long compteDebiteurId, Long compteCrediteurId, Double montant, SessionUtilisateur session) {
         return compteCourantEJB.effectuerVirement(compteDebiteurId, compteCrediteurId, montant, session);
     }
+
+    public void updateMouvement(Long mouvementId, int nouveauStatut, SessionUtilisateur session) {
+        compteCourantEJB.updateMouvement(mouvementId, nouveauStatut, session);
+    }
+
+    public boolean hasPermission(SessionUtilisateur session, String table, String action){
+        return compteCourantEJB.hasPermission(session, table, action);
+    }
+    public List<MouvementCourant> listerMouvementsEnAttente(SessionUtilisateur session) {
+        return compteCourantEJB.listerMouvementsEnAttente(session);
+    }
 }

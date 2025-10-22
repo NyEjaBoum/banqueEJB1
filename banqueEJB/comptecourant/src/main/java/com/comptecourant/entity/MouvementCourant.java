@@ -29,6 +29,10 @@ public class MouvementCourant implements Serializable {
     @Column(name = "date_mouvement")
     private LocalDate dateMouvement;
 
+    @NotNull
+    @Column(name = "statut")
+    private int statut;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public CompteCourant getCompte() { return compte; }
@@ -40,4 +44,6 @@ public class MouvementCourant implements Serializable {
     public void setTypeMouvement(int type) { this.typeMouvementId = type; }
     public LocalDate getDateMouvement() { return dateMouvement; }
     public void setDateMouvement(LocalDate dateMouvement) { this.dateMouvement = dateMouvement; }
+    public int getStatut() { return statut; }
+    public void setStatut(int statut) { this.statut = statut; }
 }

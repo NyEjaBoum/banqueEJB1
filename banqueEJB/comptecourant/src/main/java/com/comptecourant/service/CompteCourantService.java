@@ -4,13 +4,10 @@ import com.comptecourant.entity.*;
 import com.comptecourant.dao.*;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.validation.constraints.Positive;
 import java.util.List;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import com.comptecourant.session.SessionUtilisateur;
-
 import jakarta.ejb.Remote;
 
 @Stateless
@@ -18,7 +15,7 @@ import jakarta.ejb.Remote;
 public class CompteCourantService implements ICompteCourantService {
     @Inject
     private CompteCourantDAO compteDAO;
-    
+
     @Inject
     private MouvementCourantDAO mouvementDAO;
 
@@ -27,52 +24,40 @@ public class CompteCourantService implements ICompteCourantService {
         CompteCourant compte = new CompteCourant();
         compte.setClientId(clientId);
         compte.setSolde(0.0);
-        compte.setDateMaj(java.time.LocalDate.now());
+        compte.setDateMaj(LocalDate.now());
         compteDAO.save(compte);
         return compte;
+    }
+
+    public MouvementCourant creerMouvement(CompteCourant compte, Double montant, int typeMouvementId) {
+        MouvementCourant mouvement = new MouvementCourant();
+        mouvement.setCompte(compte);
+        mouvement.setMontant(montant);
+        mouvement.setTypeMouvementId(typeMouvementId);
+        mouvement.setDateMouvement(LocalDate.now());
+        mouvement.setStatut(0); // EN_ATTENTE
+        mouvementDAO.save(mouvement);
+        return mouvement;
     }
 
     public boolean effectuerVirement(Long compteDebiteurId, Long compteCrediteurId, Double montant, SessionUtilisateur session){
         checkPermission(session, "mouvement_courant", "CREATE");
         CompteCourant compteDebiteur = compteDAO.findById(compteDebiteurId);
         CompteCourant compteCrediteur = compteDAO.findById(compteCrediteurId);
-        
+
         if (compteDebiteur == null || compteCrediteur == null) {
             throw new BusinessException("Compte(s) introuvable(s)");
         }
-        
         if (montant <= 0) {
             throw new BusinessException("Montant doit être positif");
         }
-        
         if (compteDebiteur.getSolde() < montant) {
             throw new BusinessException("Solde insuffisant pour effectuer le virement");
         }
 
-        // 1. Débit du compte source
-        MouvementCourant mvtSortant = new MouvementCourant();
-        mvtSortant.setCompte(compteDebiteur);
-        mvtSortant.setMontant(montant);
-        mvtSortant.setTypeMouvementId(3); // VIREMENT_SORTANT
-        mvtSortant.setDateMouvement(LocalDate.now());
-        mouvementDAO.save(mvtSortant);
-        
-        compteDebiteur.setSolde(compteDebiteur.getSolde() - montant);
-        compteDebiteur.setDateMaj(LocalDate.now());
-        compteDAO.save(compteDebiteur);
-        
-        // 2. Crédit du compte destination
-        MouvementCourant mvtEntrant = new MouvementCourant();
-        mvtEntrant.setCompte(compteCrediteur);
-        mvtEntrant.setMontant(montant);
-        mvtEntrant.setTypeMouvementId(4); // VIREMENT_ENTRANT
-        mvtEntrant.setDateMouvement(LocalDate.now());
-        mouvementDAO.save(mvtEntrant);
-        
-        compteCrediteur.setSolde(compteCrediteur.getSolde() + montant);
-        compteCrediteur.setDateMaj(LocalDate.now());
-        compteDAO.save(compteCrediteur);
-        
+        creerMouvement(compteDebiteur, montant, 3); // VIREMENT_SORTANT
+        creerMouvement(compteCrediteur, montant, 4); // VIREMENT_ENTRANT
+
         return true;
     }
 
@@ -95,25 +80,7 @@ public class CompteCourantService implements ICompteCourantService {
         if (type == 2 && compte.getSolde() < montant) {
             throw new BusinessException("Solde insuffisant pour effectuer ce retrait");
         }
-
-        MouvementCourant mouvement = new MouvementCourant();
-        mouvement.setCompte(compte);
-        mouvement.setMontant(montant);
-        mouvement.setTypeMouvement(type);
-        mouvement.setDateMouvement(java.time.LocalDate.now());
-        mouvementDAO.save(mouvement);
-        
-        // Mise à jour du solde
-        double nouveauSolde = compte.getSolde();
-        if (type == 1) {
-            nouveauSolde += montant;
-        } else {
-            nouveauSolde -= montant;
-        }
-        compte.setSolde(nouveauSolde);
-        compte.setDateMaj(java.time.LocalDate.now());
-        compteDAO.save(compte);
-        return mouvement;
+        return creerMouvement(compte, montant, type);
     }
 
     public Double getSolde(Long compteId, SessionUtilisateur session) {
@@ -123,17 +90,19 @@ public class CompteCourantService implements ICompteCourantService {
         List<MouvementCourant> mouvements = mouvementDAO.findByCompteOrderByDate(compte);
         double solde = 0.0;
         for (MouvementCourant mvt : mouvements) {
-            switch (mvt.getTypeMouvementId()) {
-                case 1: // DEPOT
-                case 4: // VIREMENT_ENTRANT
-                    solde += mvt.getMontant();
-                    break;
-                case 2: // RETRAIT
-                case 3: // VIREMENT_SORTANT
-                    solde -= mvt.getMontant();
-                    break;
-                default:
-                    break;
+            if (mvt.getStatut() == 1) { // Seulement les mouvements validés
+                switch (mvt.getTypeMouvementId()) {
+                    case 1: // DEPOT
+                    case 4: // VIREMENT_ENTRANT
+                        solde += mvt.getMontant();
+                        break;
+                    case 2: // RETRAIT
+                    case 3: // VIREMENT_SORTANT
+                        solde -= mvt.getMontant();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         return solde;
@@ -157,10 +126,8 @@ public class CompteCourantService implements ICompteCourantService {
         if (session == null || !session.isConnecte()) {
             throw new SecurityException("Utilisateur non connecté");
         }
-
         Utilisateur user = session.getUtilisateur();
         List<ActionRole> actionsRoles = session.getActionsRoles();
-
         for(ActionRole actionRole : actionsRoles){
             if(actionRole.getNomTable().equals(table) && actionRole.getAction().equals(action)){
                 if(user.getRole() >= actionRole.getRole()){
@@ -179,5 +146,56 @@ public class CompteCourantService implements ICompteCourantService {
                              action, table, session.getUtilisateur().getRole())
             );
         }
+    }
+
+    // Nouvelle méthode flexible pour valider ou refuser un mouvement
+    public void updateMouvement(Long mouvementId, int nouveauStatut, SessionUtilisateur session) {
+        if (nouveauStatut == 1) { // VALIDE
+            checkPermission(session, "mouvement_courant", "VALIDATE");
+        } else if (nouveauStatut == 2) { // REFUSE
+            checkPermission(session, "mouvement_courant", "UPDATE");
+        } else if (nouveauStatut == 0) {
+            checkPermission(session, "mouvement_courant", "UPDATE");
+        }
+
+        MouvementCourant mouvement = mouvementDAO.findById(mouvementId);
+        if (mouvement == null || mouvement.getStatut() != 0) {
+            throw new BusinessException("Mouvement introuvable ou déjà traité");
+        }
+        mouvement.setStatut(nouveauStatut);
+        mouvementDAO.save(mouvement);
+
+        // Mise à jour du solde du compte uniquement si validé
+        if (nouveauStatut == 1) {
+            CompteCourant compte = mouvement.getCompte();
+            double nouveauSolde = compte.getSolde();
+            switch (mouvement.getTypeMouvementId()) {
+                case 1: // DEPOT
+                case 4: // VIREMENT_ENTRANT
+                    nouveauSolde += mouvement.getMontant();
+                    break;
+                case 2: // RETRAIT
+                case 3: // VIREMENT_SORTANT
+                    nouveauSolde -= mouvement.getMontant();
+                    break;
+                default:
+                    break;
+            }
+            compte.setSolde(nouveauSolde);
+            compte.setDateMaj(LocalDate.now());
+            compteDAO.save(compte);
+        }
+    }
+
+    public List<MouvementCourant> listerMouvementsEnAttente(SessionUtilisateur session) {
+        checkPermission(session, "mouvement_courant", "VALIDATE");
+        List<MouvementCourant> tous = mouvementDAO.findAll();
+        List<MouvementCourant> enAttente = new ArrayList<>();
+        for (MouvementCourant mvt : tous) {
+            if (mvt.getStatut() == 0) { // EN_ATTENTE
+                enAttente.add(mvt);
+            }
+        }
+        return enAttente;
     }
 }

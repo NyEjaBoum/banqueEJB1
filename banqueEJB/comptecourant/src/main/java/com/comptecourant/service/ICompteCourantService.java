@@ -13,4 +13,9 @@ public interface ICompteCourantService {
     List<CompteCourant> listerComptes(SessionUtilisateur session);
     List<CompteCourant> findByClientId(Long clientId, SessionUtilisateur session);
     boolean effectuerVirement(Long compteDebiteurId, Long compteCrediteurId, Double montant, SessionUtilisateur session);
+    void updateMouvement(Long mouvementId, int nouveauStatut, SessionUtilisateur session);
+    void checkPermission(SessionUtilisateur session, String table, String action);
+    boolean hasPermission(SessionUtilisateur session, String table, String action);
+   List<MouvementCourant> listerMouvementsEnAttente(SessionUtilisateur session);
+
 }
