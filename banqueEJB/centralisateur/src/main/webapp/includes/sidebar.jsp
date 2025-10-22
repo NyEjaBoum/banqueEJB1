@@ -10,8 +10,8 @@
             <a href="${pageContext.request.contextPath}/compte_courant" class="nav-item">
                 <i>💳</i> Comptes Courants
             </a>
-            <a href="${pageContext.request.contextPath}/compte_courant" class="nav-item">
-                <i>💳</i> Comptes Courants
+            <a href="${pageContext.request.contextPath}/updateMouvement" class="nav-item">
+                Aller à la validation des mouvements
             </a>
             <a href="${pageContext.request.contextPath}/virement" class="nav-item">
                 <i>💸</i> Virements

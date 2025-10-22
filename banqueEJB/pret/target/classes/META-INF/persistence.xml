@@ -3,7 +3,7 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
     <persistence-unit name="pretPU" transaction-type="JTA">
-        <jta-data-source>java:/jdbc/pretDS</jta-data-source>
+        <jta-data-source>java:/jdbc/BanqueDS</jta-data-source>
         <class>com.pret.entity.Pret</class>
         <class>com.pret.entity.Remboursement</class>
         <class>com.pret.entity.ParametrePret</class>

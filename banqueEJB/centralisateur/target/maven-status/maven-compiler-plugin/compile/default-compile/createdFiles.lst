@@ -1,5 +1,6 @@
 com\centralisateur\CentralisateurService.class
 com\centralisateur\Client.class
+com\centralisateur\courant\servlet\AccueilServlet.class
 com\centralisateur\depot\servlet\CompteDepotServlet$1.class
 com\centralisateur\TypeMouvementDAO.class
 com\centralisateur\pret\servlet\PretServlet.class
@@ -14,6 +15,7 @@ com\centralisateur\servlet\DepotParametreServlet.class
 com\centralisateur\depot\MouvementDepot.class
 com\centralisateur\depot\servlet\CompteDepotServlet.class
 com\centralisateur\courant\servlet\LogoutServlet.class
+com\centralisateur\courant\servlet\ValidationMouvementServlet.class
 com\centralisateur\ClientDAO.class
 com\centralisateur\depot\CompteDepotService$1.class
 com\centralisateur\depot\CompteDepotService.class

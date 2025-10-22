@@ -28,6 +28,7 @@ public class MouvementCourantDAO {
         return em.createQuery("SELECT m FROM MouvementCourant m", MouvementCourant.class).getResultList();
     }
 
+
     public List<MouvementCourant> findByCompteOrderByDate(CompteCourant compte) {
         return em.createQuery("SELECT m FROM MouvementCourant m WHERE m.compte = :compte ORDER BY m.dateMouvement ASC", MouvementCourant.class)
             .setParameter("compte", compte)

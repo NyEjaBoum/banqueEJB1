@@ -8,7 +8,7 @@
         <class>com.centralisateur.Client</class>
         <class>com.centralisateur.TypeMouvement</class>
         <class>com.centralisateur.Parametre</class>
-        <jta-data-source>java:/jdbc/CentralisateurDS</jta-data-source>
+        <jta-data-source>java:/jdbc/BanqueDS</jta-data-source>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
