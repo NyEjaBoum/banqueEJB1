@@ -11,7 +11,7 @@ import com.comptecourant.session.SessionUtilisateur;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import java.util.List;
-
+import com.change.IChangeService;
 @Stateless
 public class CompteCourantCentralService {
     @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
@@ -23,16 +23,43 @@ public class CompteCourantCentralService {
     @EJB
     private ClientDAO clientDAO;
 
+    @EJB(lookup = "java:global/change-1.0-SNAPSHOT/ChangeService!com.change.IChangeService")
+    private IChangeService changeService;
+
     public Double getSolde(Long compteId, SessionUtilisateur session) {
-        return compteCourantEJB.getSolde(compteId, session);
+        List<MouvementCourant> mouvements = compteCourantEJB.listerMouvements(compteId, session);
+        double solde = 0.0;
+        for (MouvementCourant mvt : mouvements) {
+            if (mvt.getStatut() == 1) { // validé
+                double montantAriary;
+                try {
+                    montantAriary = changeService.convertirEnAriary(mvt.getDevise(), mvt.getMontant(), mvt.getDateMouvement());
+                } catch (Exception e) {
+                    montantAriary = 0.0; // ou loguer l'erreur
+                }
+                switch (mvt.getTypeMouvementId()) {
+                    case 1: // DEPOT
+                    case 4: // VIREMENT_ENTRANT
+                        solde += montantAriary;
+                        break;
+                    case 2: // RETRAIT
+                    case 3: // VIREMENT_SORTANT
+                        solde -= montantAriary;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return solde;
     }
 
     public CompteCourant creerCompte(Long clientId, SessionUtilisateur session) {
         return compteCourantEJB.creerCompte(clientId, session);
     }
 
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, SessionUtilisateur session) {
-        return compteCourantEJB.ajouterMouvement(compteId, montant, type, session);
+    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session) {
+        return compteCourantEJB.ajouterMouvement(compteId, montant, type, devise, session);
     }
 
     public List<MouvementCourant> listerMouvementsCourant(Long compteId, SessionUtilisateur session) {

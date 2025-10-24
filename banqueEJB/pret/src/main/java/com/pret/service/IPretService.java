@@ -5,6 +5,7 @@ import com.pret.entity.TypePret;
 import com.pret.entity.Remboursement;
 import java.util.List;
 
+@jakarta.ejb.Remote
 public interface IPretService {
     Pret creerPret(Pret pret);
     Remboursement rembourserPret(Long pretId, Double montant);

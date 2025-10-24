@@ -24,6 +24,15 @@
         <strong>Connecté en tant que :</strong> ${sessionUtilisateur.utilisateur.email}<br>
         <strong>Rôle :</strong> ${sessionUtilisateur.utilisateur.role}<br>
         <strong>Direction :</strong> ${sessionUtilisateur.utilisateur.direction.libelle}
+        <c:forEach var="direction" items="${sessionUtilisateur.directions}">
+            <div>${direction.libelle}</div>
+            <div>${direction.niveau}</div>
+        </c:forEach>
+        <c:forEach var="actionRole" items="${sessionUtilisateur.actionsRoles}">
+            <div>${actionRole.nomTable}</div>
+            <div>${actionRole.action}</div>
+            <div>${actionRole.role}</div>
+        </c:forEach>
     </div>
 </c:if>
 

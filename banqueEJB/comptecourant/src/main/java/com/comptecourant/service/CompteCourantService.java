@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import com.comptecourant.session.SessionUtilisateur;
 import jakarta.ejb.Remote;
+// import com.change.ChangeService;
+import jakarta.ejb.EJB;
 
 @Stateless
 @Remote(ICompteCourantService.class)
@@ -18,6 +20,9 @@ public class CompteCourantService implements ICompteCourantService {
 
     @Inject
     private MouvementCourantDAO mouvementDAO;
+
+    // @EJB
+    // private ChangeService changeService;
 
     public CompteCourant creerCompte(Long clientId, SessionUtilisateur session) {
         checkPermission(session, "compte_courant", "CREATE");
@@ -71,7 +76,7 @@ public class CompteCourantService implements ICompteCourantService {
         return list;
     }
 
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, SessionUtilisateur session) {
+    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session) {
         checkPermission(session, "mouvement_courant", "CREATE");
         CompteCourant compte = compteDAO.findById(compteId);
         if (compte == null) throw new BusinessException("Compte introuvable");
@@ -80,7 +85,15 @@ public class CompteCourantService implements ICompteCourantService {
         if (type == 2 && compte.getSolde() < montant) {
             throw new BusinessException("Solde insuffisant pour effectuer ce retrait");
         }
-        return creerMouvement(compte, montant, type);
+        MouvementCourant mvt = new MouvementCourant();
+        mvt.setCompte(compte);
+        mvt.setMontant(montant);
+        mvt.setTypeMouvementId(type);
+        mvt.setDateMouvement(LocalDate.now());
+        mvt.setDevise(devise);
+        mvt.setStatut(0); // EN_ATTENTE
+        mouvementDAO.save(mvt);
+        return mvt;
     }
 
     public Double getSolde(Long compteId, SessionUtilisateur session) {
@@ -91,14 +104,15 @@ public class CompteCourantService implements ICompteCourantService {
         double solde = 0.0;
         for (MouvementCourant mvt : mouvements) {
             if (mvt.getStatut() == 1) { // Seulement les mouvements validés
+                double montantAriary = mvt.getMontant(); // Conversion à faire dans centralisateur
                 switch (mvt.getTypeMouvementId()) {
                     case 1: // DEPOT
                     case 4: // VIREMENT_ENTRANT
-                        solde += mvt.getMontant();
+                        solde += montantAriary;
                         break;
                     case 2: // RETRAIT
                     case 3: // VIREMENT_SORTANT
-                        solde -= mvt.getMontant();
+                        solde -= montantAriary;
                         break;
                     default:
                         break;

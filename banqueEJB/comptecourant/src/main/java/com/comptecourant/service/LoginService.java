@@ -10,6 +10,7 @@ import jakarta.ejb.Remove;
 import java.util.List;
 
 @Stateful
+@jakarta.ejb.Remote(IAuthService.class)
 public class LoginService implements IAuthService {
     @EJB
     private AuthService authService;

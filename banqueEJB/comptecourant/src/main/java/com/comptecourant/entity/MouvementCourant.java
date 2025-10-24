@@ -33,6 +33,11 @@ public class MouvementCourant implements Serializable {
     @Column(name = "statut")
     private int statut;
 
+    @NotNull
+    @Column(name = "devise", length = 10)
+    private String devise; // "MGA", "EUR", "USD", etc.
+
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public CompteCourant getCompte() { return compte; }
@@ -46,4 +51,6 @@ public class MouvementCourant implements Serializable {
     public void setDateMouvement(LocalDate dateMouvement) { this.dateMouvement = dateMouvement; }
     public int getStatut() { return statut; }
     public void setStatut(int statut) { this.statut = statut; }
+    public String getDevise() { return devise; }
+    public void setDevise(String devise) { this.devise = devise; }
 }

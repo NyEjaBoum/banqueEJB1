@@ -12,26 +12,45 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 import com.comptecourant.session.SessionUtilisateur;
+import com.change.IChangeService;
+import java.util.Map;
+import java.util.HashMap;
 
 @WebServlet("/compte_courant")
 public class CompteCourantServlet extends HttpServlet {
     @EJB
     private CompteCourantCentralService compteService;
 
+    @EJB(lookup = "java:global/change-1.0-SNAPSHOT/ChangeService!com.change.IChangeService")
+    private IChangeService changeService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession httpSession = req.getSession();
         SessionUtilisateur sessionUtilisateur = (SessionUtilisateur) httpSession.getAttribute("sessionUtilisateur");
-        
-        // Si pas de session, rediriger vers login
+
         if (sessionUtilisateur == null || !sessionUtilisateur.isConnecte()) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
+        List<String> devises;
         try {
-            List<CompteCourant> comptes = compteService.listerComptes(sessionUtilisateur);
-            req.setAttribute("comptes", comptes);
+            devises = changeService.listerDevises();
+        } catch (Exception e) {
+            devises = List.of();
+            req.setAttribute("erreur", "Erreur lors du chargement des devises : " + e.getMessage());
+        }
+        req.setAttribute("devises", devises);
+
+        try {
+List<CompteCourant> comptes = compteService.listerComptes(sessionUtilisateur);
+Map<Long, Double> soldes = new HashMap<>();
+for (CompteCourant compte : comptes) {
+    soldes.put(compte.getId(), compteService.getSolde(compte.getId(), sessionUtilisateur));
+}
+req.setAttribute("comptes", comptes);
+req.setAttribute("soldes", soldes);
 
             List<TypeMouvement> types = compteService.listerTypesMouvement();
             req.setAttribute("typesMouvement", types);
@@ -82,7 +101,8 @@ public class CompteCourantServlet extends HttpServlet {
                 Long compteId = Long.valueOf(req.getParameter("compteId"));
                 Double montant = Double.valueOf(req.getParameter("montant"));
                 int type = Integer.parseInt(req.getParameter("type"));
-                compteService.ajouterMouvement(compteId, montant, type, sessionUtilisateur);
+                String devise = req.getParameter("devise");
+                compteService.ajouterMouvement(compteId, montant, type, devise, sessionUtilisateur);
                 resp.sendRedirect(req.getContextPath() + "/compte_courant");
             }
         } catch (SecurityException ex) {

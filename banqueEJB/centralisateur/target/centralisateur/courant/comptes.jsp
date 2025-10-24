@@ -2,6 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.comptecourant.entity.CompteCourant,com.comptecourant.entity.MouvementCourant,java.util.List" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -65,7 +67,9 @@
                                     </c:if>
                                 </c:forEach>
                             </td>
-                            <td>${compte.solde} €</td>
+                            <td>
+                                <fmt:formatNumber value="${soldes[compte.id]}" type="number" groupingUsed="true"/> Ar
+                            </td>
                             <td>${compte.dateMaj}</td>
                             <td>
                                 <form action="compte_courant" method="get" style="display:inline;">
@@ -106,6 +110,12 @@
                     <label>Montant:</label>
                     <input type="number" name="montant" step="0.01" required>
                 </div>
+                <label>Devise:</label>
+                <select name="devise" required>
+                    <c:forEach var="dev" items="${devises}">
+                        <option value="${dev}">${dev}</option>
+                    </c:forEach>
+                </select>
                 <div class="form-group">
                     <label>Type de mouvement:</label>
                     <select name="type" required>
