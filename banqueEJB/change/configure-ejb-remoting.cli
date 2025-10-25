@@ -1,0 +1,8 @@
+embed-server --server-config=standalone.xml --std-out=echo
+
+# Ne PAS ajouter le http-connector (il existe déjà)
+# Configure juste le service remote EJB pour utiliser ce connecteur
+/subsystem=ejb3/service=remote:write-attribute(name=connector-ref,value=http-remoting-connector)
+/subsystem=ejb3/service=remote:write-attribute(name=thread-pool-name,value=default)
+
+stop-embedded-server
