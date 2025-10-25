@@ -5,7 +5,7 @@ import com.comptecourant.session.SessionUtilisateur;
 import java.util.List;
 import jakarta.ejb.Remote;
 
-@Remote
+@jakarta.ejb.Remote
 public interface IAuthService {
     SessionUtilisateur login(String email, String motDePasse);
     List<Utilisateur> listerUtilisateurs();

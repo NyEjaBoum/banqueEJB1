@@ -52,9 +52,20 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com</groupId>
+            <artifactId>change</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-naming-client</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
         <!-- Ajoute la dépendance vers le module comptecourant si besoin -->
     </dependencies>

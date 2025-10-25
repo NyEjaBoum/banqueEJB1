@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ICompteCourantService {
     CompteCourant creerCompte(Long clientId, SessionUtilisateur session);
-    MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, SessionUtilisateur session);
+    MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session);
     Double getSolde(Long compteId, SessionUtilisateur session);
     List<MouvementCourant> listerMouvements(Long compteId, SessionUtilisateur session);
     List<CompteCourant> listerComptes(SessionUtilisateur session);

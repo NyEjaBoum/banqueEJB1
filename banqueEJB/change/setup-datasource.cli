@@ -1,0 +1,3 @@
+embed-server --server-config=standalone.xml --std-out=echo
+data-source add --name=BanqueDS --jndi-name=java:jboss/datasources/BanqueDS --driver-name=h2 --connection-url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE --user-name=sa --password=sa
+stop-embedded-server
