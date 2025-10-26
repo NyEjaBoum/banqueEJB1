@@ -11,8 +11,8 @@ cd comptecourant
 call mvn clean
 cd ..
 
-REM Nettoyer centralisateur
-cd centralisateur
+REM Nettoyer change
+cd change
 call mvn clean
 cd ..
 

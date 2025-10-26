@@ -76,20 +76,23 @@ public class CompteCourantService implements ICompteCourantService {
         return list;
     }
 
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session) {
+    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, LocalDate dateMouvement, SessionUtilisateur session) {
         checkPermission(session, "mouvement_courant", "CREATE");
         CompteCourant compte = compteDAO.findById(compteId);
         if (compte == null) throw new BusinessException("Compte introuvable");
         if (montant == null || montant <= 0) throw new BusinessException("Montant doit être positif");
         if (type != 1 && type != 2) throw new BusinessException("Type de mouvement non autorisé");
         if (type == 2 && compte.getSolde() < montant) {
-            throw new BusinessException("Solde insuffisant pour effectuer ce retrait");
+            throw new BusinessException(
+                "Solde insuffisant pour effectuer ce retrait (solde actuel : " 
+                + compte.getSolde() + " Ar, montant demandé : " + montant + " Ar)"
+            );
         }
         MouvementCourant mvt = new MouvementCourant();
         mvt.setCompte(compte);
         mvt.setMontant(montant);
         mvt.setTypeMouvementId(type);
-        mvt.setDateMouvement(LocalDate.now());
+        mvt.setDateMouvement(dateMouvement);
         mvt.setDevise(devise);
         mvt.setStatut(0); // EN_ATTENTE
         mouvementDAO.save(mvt);

@@ -4,10 +4,11 @@ import com.comptecourant.entity.CompteCourant;
 import com.comptecourant.entity.MouvementCourant;
 import com.comptecourant.session.SessionUtilisateur;
 import java.util.List;
+import java.time.LocalDate;
 
 public interface ICompteCourantService {
     CompteCourant creerCompte(Long clientId, SessionUtilisateur session);
-    MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session);
+    MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, LocalDate dateMouvement, SessionUtilisateur session);
     Double getSolde(Long compteId, SessionUtilisateur session);
     List<MouvementCourant> listerMouvements(Long compteId, SessionUtilisateur session);
     List<CompteCourant> listerComptes(SessionUtilisateur session);

@@ -116,6 +116,7 @@
                         <option value="${dev}">${dev}</option>
                     </c:forEach>
                 </select>
+
                 <div class="form-group">
                     <label>Type de mouvement:</label>
                     <select name="type" required>
@@ -124,6 +125,9 @@
                         </c:forEach>
                     </select>
                 </div>
+                <label>Date du mouvement (optionnel):</label>
+                <input type="date" name="dateMouvement">
+                
                 <button type="submit" class="btn btn-primary">Valider</button>
             </form>
         </div>
