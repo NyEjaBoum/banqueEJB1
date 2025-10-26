@@ -4,16 +4,17 @@ cd /d %~dp0
 cd change
 call mvn clean install
 
-REM Build l'image Docker
+REM Build l'image Docker (optionnel si tu ne changes pas le Dockerfile)
 call docker build -t change-ejb .
 
-REM Arrête le conteneur existant s'il tourne
-call docker stop change-ejb
+REM Copie le nouveau JAR dans le conteneur existant
+call docker cp target/change-1.0-SNAPSHOT.jar change-ejb:/opt/jboss/wildfly/standalone/deployments/change-1.0-SNAPSHOT.jar
 
-REM Démarre le conteneur existant (ou crée-le s'il n'existe pas)
-call docker start change-ejb || docker run -d -p 8081:8080 --name change-ejb change-ejb
+REM (Optionnel) Copie le nouveau cours.csv si besoin
+call docker cp src/main/resources/cours.csv change-ejb:/opt/jboss/wildfly/standalone/change/cours.csv
+
+REM Redeploy le JAR via le CLI WildFly
+call docker exec change-ejb /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="deployment redeploy change-1.0-SNAPSHOT.jar"
 
 echo Déploiement terminé. Le EJB change est disponible sur le port 8081.
 pause
-
-@REM docker exec -it change-ejb /opt/jboss/wildfly/bin/add-user.sh -a -u nyeja -p nyeja

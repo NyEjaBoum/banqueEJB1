@@ -24,6 +24,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NameClassPair;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @WebServlet("/compte_courant")
 public class CompteCourantServlet extends HttpServlet {
@@ -131,7 +133,7 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession httpSession = req.getSession();
         SessionUtilisateur sessionUtilisateur = (SessionUtilisateur) httpSession.getAttribute("sessionUtilisateur");
-        
+        IChangeService changeService = getChangeService();
         if (sessionUtilisateur == null || !sessionUtilisateur.isConnecte()) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
@@ -148,7 +150,12 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
                 Double montant = Double.valueOf(req.getParameter("montant"));
                 int type = Integer.parseInt(req.getParameter("type"));
                 String devise = req.getParameter("devise");
-                compteService.ajouterMouvement(compteId, montant, type, devise, sessionUtilisateur);
+                String dateStr = req.getParameter("dateMouvement");
+                LocalDate dateMouvement = (dateStr != null && !dateStr.isEmpty())
+                    ? LocalDate.parse(dateStr)
+                    : LocalDate.now();
+                double montantAriary = changeService.convertirEnAriary(devise, montant, dateMouvement);
+                compteService.ajouterMouvement(compteId, montantAriary, type, devise, dateMouvement, sessionUtilisateur);
                 resp.sendRedirect(req.getContextPath() + "/compte_courant");
             }
         } catch (SecurityException ex) {

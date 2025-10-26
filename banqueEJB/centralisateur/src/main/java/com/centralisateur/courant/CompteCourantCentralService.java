@@ -21,6 +21,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NameClassPair;
+import java.time.LocalDate;
+
 @Stateless
 public class CompteCourantCentralService {
     @EJB(lookup = "java:global/comptecourant-1.0-SNAPSHOT/CompteCourantService!com.comptecourant.service.ICompteCourantService")
@@ -71,49 +73,53 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
     }
 }
 
-    public Double getSolde(Long compteId, SessionUtilisateur session) {
-        List<MouvementCourant> mouvements = compteCourantEJB.listerMouvements(compteId, session);
-        double solde = 0.0;
-        for (MouvementCourant mvt : mouvements) {
-    if (mvt.getStatut() == 1) {
-        double montantAriary;
-        try {
-            IChangeService changeServ = getChangeService();
-            System.out.println("Devise du mouvement: " + mvt.getDevise());
-            if (changeServ != null) {
-                montantAriary = changeServ.convertirEnAriary(mvt.getDevise(), mvt.getMontant(), mvt.getDateMouvement());
-                System.out.println("Conversion via EJB: " + mvt.getMontant() + " " + mvt.getDevise() + " => " + montantAriary + " Ar");
-            } else {
-                System.out.println("Service de change INDISPONIBLE, montant utilisé: " + mvt.getMontant());
-                montantAriary = mvt.getMontant();
-            }
-        } catch (Exception e) {
-            montantAriary = mvt.getMontant();
-            System.err.println("Erreur conversion devise : " + e.getMessage());
-        }
-                switch (mvt.getTypeMouvementId()) {
-                    case 1: // DEPOT
-                    case 4: // VIREMENT_ENTRANT
-                        solde += montantAriary;
-                        break;
-                    case 2: // RETRAIT
-                    case 3: // VIREMENT_SORTANT
-                        solde -= montantAriary;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        return solde;
-    }
+    // public Double getSolde(Long compteId, SessionUtilisateur session) {
+    //     List<MouvementCourant> mouvements = compteCourantEJB.listerMouvements(compteId, session);
+    //     double solde = 0.0;
+    //     for (MouvementCourant mvt : mouvements) {
+    // if (mvt.getStatut() == 1) {
+    //     double montantAriary;
+    //     try {
+    //         IChangeService changeServ = getChangeService();
+    //         System.out.println("Devise du mouvement: " + mvt.getDevise());
+    //         if (changeServ != null) {
+    //             montantAriary = changeServ.convertirEnAriary(mvt.getDevise(), mvt.getMontant(), mvt.getDateMouvement());
+    //             System.out.println("Conversion via EJB: " + mvt.getMontant() + " " + mvt.getDevise() + " => " + montantAriary + " Ar");
+    //         } else {
+    //             System.out.println("Service de change INDISPONIBLE, montant utilisé: " + mvt.getMontant());
+    //             montantAriary = mvt.getMontant();
+    //         }
+    //     } catch (Exception e) {
+    //         montantAriary = mvt.getMontant();
+    //         System.err.println("Erreur conversion devise : " + e.getMessage());
+    //     }
+    //             switch (mvt.getTypeMouvementId()) {
+    //                 case 1: // DEPOT
+    //                 case 4: // VIREMENT_ENTRANT
+    //                     solde += montantAriary;
+    //                     break;
+    //                 case 2: // RETRAIT
+    //                 case 3: // VIREMENT_SORTANT
+    //                     solde -= montantAriary;
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //         }
+    //     }
+    //     return solde;
+    // }
 
     public CompteCourant creerCompte(Long clientId, SessionUtilisateur session) {
         return compteCourantEJB.creerCompte(clientId, session);
     }
 
-    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, SessionUtilisateur session) {
-        return compteCourantEJB.ajouterMouvement(compteId, montant, type, devise, session);
+    public Double getSolde(Long compteId, SessionUtilisateur session) {
+        return compteCourantEJB.getSolde(compteId, session);
+    }
+
+    public MouvementCourant ajouterMouvement(Long compteId, Double montant, int type, String devise, LocalDate dateMouvement, SessionUtilisateur session) {
+        return compteCourantEJB.ajouterMouvement(compteId, montant, type, devise, dateMouvement, session);
     }
 
     public List<MouvementCourant> listerMouvementsCourant(Long compteId, SessionUtilisateur session) {

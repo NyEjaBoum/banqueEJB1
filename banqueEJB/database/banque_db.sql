@@ -178,4 +178,4 @@ INSERT INTO type_pret (libelle, nb_mois_remboursement, interet, montant) VALUES
 ('Prêt Court Terme', 12, 30.00, 2000000),
 ('Prêt Long Terme', 60, 20.00, 30000000);
 
--- Ajoute ici d'autres données de test si besoin
+-- Ajoute ici d'autres données de test si besoin chcp 65001
