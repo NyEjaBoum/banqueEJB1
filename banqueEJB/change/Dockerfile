@@ -7,7 +7,7 @@ RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/opt/jboss/wildfly/bin/setup-data
 RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/opt/jboss/wildfly/bin/configure-ejb-remoting.cli
 
 COPY src/main/resources/cours.csv /opt/jboss/wildfly/standalone/change/cours.csv
-COPY target/change-1.0-SNAPSHOT.jar /opt/jboss/wildfly/standalone/deployments/
+COPY target/change-1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/
 
 EXPOSE 8080 9990
 

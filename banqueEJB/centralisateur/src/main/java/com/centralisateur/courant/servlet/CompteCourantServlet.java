@@ -26,6 +26,12 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NameClassPair;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @WebServlet("/compte_courant")
 public class CompteCourantServlet extends HttpServlet {
@@ -91,6 +97,10 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
         }
         req.setAttribute("devises", devises);
 
+        // Devises via Web Service REST
+        List<String> devisesWS = compteService.listerDevisesWS();
+        req.setAttribute("devisesWS", devisesWS);
+
         try {
             List<CompteCourant> comptes = compteService.listerComptes(sessionUtilisateur);
             Map<Long, Double> soldes = new HashMap<>();
@@ -150,11 +160,18 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
                 Double montant = Double.valueOf(req.getParameter("montant"));
                 int type = Integer.parseInt(req.getParameter("type"));
                 String devise = req.getParameter("devise");
+                String deviseWS = req.getParameter("deviseWS");
                 String dateStr = req.getParameter("dateMouvement");
                 LocalDate dateMouvement = (dateStr != null && !dateStr.isEmpty())
                     ? LocalDate.parse(dateStr)
                     : LocalDate.now();
                 double montantAriary = changeService.convertirEnAriary(devise, montant, dateMouvement);
+                if (deviseWS != null && !deviseWS.isEmpty()) {
+                    montantAriary = compteService.convertirEnAriaryWS(deviseWS, montant, dateMouvement);
+                    compteService.ajouterMouvement(compteId, montantAriary, type, deviseWS, dateMouvement, sessionUtilisateur);
+                    resp.sendRedirect(req.getContextPath() + "/compte_courant");
+                    return;
+                }
                 compteService.ajouterMouvement(compteId, montantAriary, type, devise, dateMouvement, sessionUtilisateur);
                 resp.sendRedirect(req.getContextPath() + "/compte_courant");
             }

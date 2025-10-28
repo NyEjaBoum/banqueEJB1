@@ -14,3 +14,6 @@ et on prend la cours pour date mais quand on consulte solde c'est toujours en ar
 docker:
     lay .war sy .jar ny change no alefa am lay standalone deployments ny wildfly am docker 
     
+
+
+alea vaovao : creer  web service maka devise d antsoina am central , on enleve pas 

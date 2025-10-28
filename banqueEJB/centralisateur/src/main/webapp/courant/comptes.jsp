@@ -117,6 +117,13 @@
                     </c:forEach>
                 </select>
 
+                <label>Devise (Web Service):</label>
+                    <select name="deviseWS">
+                        <c:forEach var="dev" items="${devisesWS}">
+                            <option value="${dev}">${dev}</option>
+                        </c:forEach>
+                    </select>
+
                 <div class="form-group">
                     <label>Type de mouvement:</label>
                     <select name="type" required>

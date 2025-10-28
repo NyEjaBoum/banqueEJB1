@@ -2,4 +2,5 @@ com\change\ChangeService.class
 com\change\resources\JakartaEE11Resource.class
 com\change\CoursDevise.class
 com\change\JakartaRestConfiguration.class
+com\change\resources\CoursRestResource.class
 com\change\IChangeService.class

@@ -23,4 +23,5 @@ com\centralisateur\courant\servlet\LoginServlet.class
 com\centralisateur\depot\CompteDepot.class
 com\centralisateur\servlet\DepotOperationServlet.class
 com\centralisateur\courant\servlet\CompteCourantServlet.class
+com\centralisateur\courant\CompteCourantCentralService$1.class
 com\centralisateur\servlet\ClientServlet.class
