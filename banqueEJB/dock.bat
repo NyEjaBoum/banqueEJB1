@@ -8,7 +8,7 @@ REM Build l'image Docker (optionnel si tu ne changes pas le Dockerfile)
 call docker build -t change-ejb .
 
 REM Copie le nouveau JAR dans le conteneur existant
-call docker cp target/change-1.0-SNAPSHOT.jar change-ejb:/opt/jboss/wildfly/standalone/deployments/change-1.0-SNAPSHOT.jar
+call docker cp target/change-1.0-SNAPSHOT.war change-ejb:/opt/jboss/wildfly/standalone/deployments/change-1.0-SNAPSHOT.jar
 
 REM (Optionnel) Copie le nouveau cours.csv si besoin
 call docker cp src/main/resources/cours.csv change-ejb:/opt/jboss/wildfly/standalone/change/cours.csv

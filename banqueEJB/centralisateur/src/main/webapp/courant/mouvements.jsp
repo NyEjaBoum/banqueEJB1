@@ -25,6 +25,7 @@
                         <th>ID</th>
                         <th>Montant</th>
                         <th>Type</th>
+                        <th>Devise</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -32,13 +33,16 @@
                     <c:forEach var="mvt" items="${mouvements}">
                         <tr>
                             <td>${mvt.id}</td>
-                            <td>${mvt.montant} €</td>
+                            <td>${mvt.montant}</td>
                             <td>
                                 <c:forEach var="type" items="${typesMouvement}">
                                     <c:if test="${type.id == mvt.typeMouvementId}">
                                         ${type.libelle}
                                     </c:if>
                                 </c:forEach>
+                            </td>
+                            <td>
+                            ${mvt.devise}
                             </td>
                             <td>${mvt.dateMouvement}</td>
                         </tr>

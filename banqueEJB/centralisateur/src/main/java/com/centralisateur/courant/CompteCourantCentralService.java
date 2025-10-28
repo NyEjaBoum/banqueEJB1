@@ -22,6 +22,12 @@ import javax.naming.NamingException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NameClassPair;
 import java.time.LocalDate;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @Stateless
 public class CompteCourantCentralService {
@@ -39,39 +45,73 @@ public class CompteCourantCentralService {
     // private IChangeService changeService;
 
     // Méthode pour obtenir le service de change depuis Docker
-private IChangeService getChangeService() {
-    try {
-        Properties props = new Properties();
-        props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
-        props.put(Context.PROVIDER_URL, "http-remoting://localhost:8081");
-        props.put(Context.SECURITY_PRINCIPAL, "nyeja"); // Remplace par ton user WildFly Docker
-        props.put(Context.SECURITY_CREDENTIALS, "nyeja"); // Remplace par ton mot de passe Docker
-        props.put("jboss.naming.client.ejb.context", true);
-props.put("jboss.sasl.policy.noanonymous", "true");
-props.put("jboss.sasl.policy.noplaintext", "false");
-props.put("jboss.sasl.policy.nodictionary", "true");
-props.put("jboss.sasl.policy.noactive", "true");
-props.put("jboss.sasl.policy.forward_secrecy", "true");
-props.put("jboss.sasl.policy.credentials", "true");
+    private IChangeService getChangeService() {
+        try {
+            Properties props = new Properties();
+            props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+            props.put(Context.PROVIDER_URL, "http-remoting://localhost:8081");
+            props.put(Context.SECURITY_PRINCIPAL, "nyeja"); // Remplace par ton user WildFly Docker
+            props.put(Context.SECURITY_CREDENTIALS, "nyeja"); // Remplace par ton mot de passe Docker
+            props.put("jboss.naming.client.ejb.context", true);
+            props.put("jboss.sasl.policy.noanonymous", "true");
+            props.put("jboss.sasl.policy.noplaintext", "false");
+            props.put("jboss.sasl.policy.nodictionary", "true");
+            props.put("jboss.sasl.policy.noactive", "true");
+            props.put("jboss.sasl.policy.forward_secrecy", "true");
+            props.put("jboss.sasl.policy.credentials", "true");
 
-        Context context = new InitialContext(props);
+            Context context = new InitialContext(props);
 
-        // Liste les JNDI disponibles pour debug
-        NamingEnumeration<NameClassPair> list = context.list("");
-        while (list.hasMore()) {
-            NameClassPair nc = list.next();
-            System.out.println("JNDI: " + nc.getName() + " -> " + nc.getClassName());
-        }
+            // Liste les JNDI disponibles pour debug
+            NamingEnumeration<NameClassPair> list = context.list("");
+            while (list.hasMore()) {
+                NameClassPair nc = list.next();
+                System.out.println("JNDI: " + nc.getName() + " -> " + nc.getClassName());
+            }
 
-Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChangeService");
-        System.out.println("Type retourné par le lookup : " + obj.getClass().getName());
-        return (IChangeService) obj;
-    } catch (Exception e) {
-        System.err.println("Impossible de se connecter au service de change Docker : " + e.getMessage());
-        e.printStackTrace();
-        return null;
+            Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChangeService");
+                System.out.println("Type retourné par le lookup : " + obj.getClass().getName());
+                return (IChangeService) obj;
+            } catch (Exception e) {
+                System.err.println("Impossible de se connecter au service de change Docker : " + e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
     }
-}
+
+    public double convertirEnAriaryWS(String devise, double montant, LocalDate date) {
+        try {
+            String url = "http://localhost:8081/change-1.0-SNAPSHOT/resources/coursrest/convertir"
+                + "?devise=" + devise
+                + "&montant=" + montant
+                + "&date=" + date;
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return Double.parseDouble(response.body());
+        } catch (Exception e) {
+            // En cas d'erreur, retourne le montant original
+            return montant;
+        }
+    }
+
+    public List<String> listerDevisesWS() {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/change-1.0-SNAPSHOT/resources/coursrest/devises"))
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return List.of("MGAA", "EUR", "USD");
+        }
+    }
 
     // public Double getSolde(Long compteId, SessionUtilisateur session) {
     //     List<MouvementCourant> mouvements = compteCourantEJB.listerMouvements(compteId, session);
