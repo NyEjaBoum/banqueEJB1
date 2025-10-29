@@ -11,8 +11,10 @@ import com.change.CoursDevise;
 public class CoursRestResource {
 
     private static final String FICHIER_COURS = "cours.csv";
-
-    private List<CoursDevise> lireCours() throws IOException {   
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CoursDevise> lireCours() throws IOException {   
         List<CoursDevise> list = new ArrayList<>();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(FICHIER_COURS);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {

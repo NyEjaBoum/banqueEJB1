@@ -28,6 +28,9 @@ import java.net.http.HttpResponse;
 import java.net.URI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 @Stateless
 public class CompteCourantCentralService {
@@ -113,42 +116,30 @@ public class CompteCourantCentralService {
         }
     }
 
-    // public Double getSolde(Long compteId, SessionUtilisateur session) {
-    //     List<MouvementCourant> mouvements = compteCourantEJB.listerMouvements(compteId, session);
-    //     double solde = 0.0;
-    //     for (MouvementCourant mvt : mouvements) {
-    // if (mvt.getStatut() == 1) {
-    //     double montantAriary;
-    //     try {
-    //         IChangeService changeServ = getChangeService();
-    //         System.out.println("Devise du mouvement: " + mvt.getDevise());
-    //         if (changeServ != null) {
-    //             montantAriary = changeServ.convertirEnAriary(mvt.getDevise(), mvt.getMontant(), mvt.getDateMouvement());
-    //             System.out.println("Conversion via EJB: " + mvt.getMontant() + " " + mvt.getDevise() + " => " + montantAriary + " Ar");
-    //         } else {
-    //             System.out.println("Service de change INDISPONIBLE, montant utilisé: " + mvt.getMontant());
-    //             montantAriary = mvt.getMontant();
-    //         }
-    //     } catch (Exception e) {
-    //         montantAriary = mvt.getMontant();
-    //         System.err.println("Erreur conversion devise : " + e.getMessage());
-    //     }
-    //             switch (mvt.getTypeMouvementId()) {
-    //                 case 1: // DEPOT
-    //                 case 4: // VIREMENT_ENTRANT
-    //                     solde += montantAriary;
-    //                     break;
-    //                 case 2: // RETRAIT
-    //                 case 3: // VIREMENT_SORTANT
-    //                     solde -= montantAriary;
-    //                     break;
-    //                 default:
-    //                     break;
-    //             }
-    //         }
-    //     }
-    //     return solde;
-    // }
+public List<String> listerCoursDevisesWS() {
+    try {
+        String url = "http://localhost:8081/change-1.0-SNAPSHOT/resources/coursrest/all";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> rawList = mapper.readValue(response.body(), new TypeReference<List<Map<String, Object>>>() {});
+        List<String> result = new ArrayList<>();
+        for (Map<String, Object> item : rawList) {
+            String devise = (String) item.get("devise");
+            String dateDebut = (String) item.get("dateDebut");
+            String dateFin = (String) item.get("dateFin");
+            Object cour = item.get("cour");
+            result.add(devise + " | " + dateDebut + " | " + (dateFin != null ? dateFin : "") + " | " + cour);
+        }
+        return result;
+    } catch (Exception e) {
+        return java.util.Collections.emptyList();
+    }
+}
 
     public CompteCourant creerCompte(Long clientId, SessionUtilisateur session) {
         return compteCourantEJB.creerCompte(clientId, session);
