@@ -90,9 +90,9 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
         List<String> devises;
         try {
             IChangeService changeServ = getChangeService();
-            devises = changeServ != null ? changeServ.listerDevises() : List.of("MGA", "EUR", "USD");
+            devises = changeServ != null ? changeServ.listerDevises() : List.of("tsy mety", "tsy mety", "tsy mety");
         } catch (Exception e) {
-            devises = List.of("MGA", "EUR", "USD");
+            devises = List.of("tsy mety", "tsy mety", "tsy mety");
             req.setAttribute("info", "Service de change Docker indisponible, devises par défaut utilisées");
         }
         req.setAttribute("devises", devises);
@@ -100,6 +100,9 @@ Object obj = context.lookup("change-1.0-SNAPSHOT/ChangeService!com.change.IChang
         // Devises via Web Service REST
         List<String> devisesWS = compteService.listerDevisesWS();
         req.setAttribute("devisesWS", devisesWS);
+
+        List<String> coursDevises = compteService.listerCoursDevisesWS();
+        req.setAttribute("coursDevises", coursDevises);
 
         try {
             List<CompteCourant> comptes = compteService.listerComptes(sessionUtilisateur);

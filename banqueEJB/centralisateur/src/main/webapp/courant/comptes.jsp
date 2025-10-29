@@ -27,6 +27,17 @@
             <div class="alert alert-info">Solde du compte sélectionné : ${solde} €</div>
         </c:if>
 
+        <%-- <c:if test="${not empty coursDevises}"> --%>
+            <div class="card">
+                <h2>📈 Cours des devises</h2>
+                <ul>
+                    <c:forEach var="cours" items="${coursDevises}">
+                        <li>${cours}</li>
+                    </c:forEach>
+                </ul>
+            </div>
+        <%-- </c:if> --%>
+
         <div class="card">
             <h2>➕ Créer un compte courant</h2>
             <form action="comptes" method="post">
@@ -118,11 +129,12 @@
                 </select>
 
                 <label>Devise (Web Service):</label>
-                    <select name="deviseWS">
-                        <c:forEach var="dev" items="${devisesWS}">
-                            <option value="${dev}">${dev}</option>
-                        </c:forEach>
-                    </select>
+                <select name="deviseWS">
+                    <option value="">-- Aucune --</option>
+                    <c:forEach var="dev" items="${devisesWS}">
+                        <option value="${dev}">${dev}</option>
+                    </c:forEach>
+                </select>
 
                 <div class="form-group">
                     <label>Type de mouvement:</label>
